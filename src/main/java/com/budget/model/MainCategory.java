@@ -1,32 +1,56 @@
 package com.budget.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity  //This tells Hibernate to make a table out of this class
-public class MainCategory {
+public class MainCategory implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "main_id")
+    private Long id;
 
     private String name;
 
-    private int money;
+    @OneToMany(mappedBy = "mainCategory", fetch = FetchType.LAZY)
+    private Set<Item> items;
 
-    public MainCategory() {}
+    @OneToMany(mappedBy = "mainCategory", fetch = FetchType.LAZY)
+    private Set<SubCategory> subCategories = new HashSet<>();
 
-    public MainCategory(String name, int money) {
-        this.name = name;
-        this.money = money;
+    public MainCategory() {
     }
 
-    public Integer getId() {
+    public MainCategory(String name) {
+        this.name = name;
+    }
+
+    public Set<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<Item> items) {
+        this.items = items;
+    }
+
+    public Set<SubCategory> getSubCategories() {
+        return subCategories;
+    }
+
+    public void addSubCategory(SubCategory subCategories) {
+        this.subCategories.add(subCategories);
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -38,16 +62,8 @@ public class MainCategory {
         this.name = name;
     }
 
-    public int getMoney() {
-        return money;
-    }
-
-    public void setMoney(int money) {
-        this.money = money;
-    }
-
     @Override
     public String toString() {
-        return name + " " + money;
+        return name;
     }
 }

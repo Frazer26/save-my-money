@@ -1,64 +1,71 @@
-//package com.budget.model;
-//
-//import javax.persistence.Entity;
-//import javax.persistence.GeneratedValue;
-//import javax.persistence.GenerationType;
-//import javax.persistence.Id;
-//
-//@Entity
-//public class SubCategory {
-//    @Id
-//    @GeneratedValue(strategy= GenerationType.AUTO)
-//    private Integer id;
-//
-//    private String name;
-//
-//    private int money;
-//
-//    private MainCategory mainCategory;
-//
-//    public SubCategory() {}
-//
-//    public SubCategory(String name, int money, MainCategory mainCategory) {
-//        this.name = name;
-//        this.money = money;
-//        this.mainCategory = mainCategory;
-//    }
-//
-//    public Integer getId() {
-//        return id;
-//    }
-//
-//    public void setId(Integer id) {
-//        this.id = id;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public int getMoney() {
-//        return money;
-//    }
-//
-//    public void setMoney(int money) {
-//        this.money = money;
-//    }
-//
-//    public MainCategory getMainCategory() {
-//        return mainCategory;
-//    }
-//
-//    public void setMainCategory(MainCategory mainCategory) {
-//        this.mainCategory = mainCategory;
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return name + " " + money;
-//    }
-//}
+package com.budget.model;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+public class SubCategory implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "sub_id")
+    private Long id;
+
+    private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "main_id", nullable = false)
+    private MainCategory mainCategory;
+
+    @OneToMany(mappedBy = "subCategory", fetch = FetchType.LAZY)
+    private Set<Item> items = new HashSet<>();
+
+    public SubCategory() {
+    }
+
+    public SubCategory(String name, MainCategory mainCategory) {
+        this.name = name;
+        this.mainCategory = mainCategory;
+    }
+
+    public Set<Item> getItems() {
+        return items;
+    }
+
+    public void addItem(Item items) {
+        this.items.add(items);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public MainCategory getMainCategory() {
+        return mainCategory;
+    }
+
+    public void setMainCategory(MainCategory mainCategory) {
+        this.mainCategory = mainCategory;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+}
