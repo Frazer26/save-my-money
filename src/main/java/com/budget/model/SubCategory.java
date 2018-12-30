@@ -36,8 +36,8 @@ public class SubCategory implements Serializable {
         return items;
     }
 
-    public void addItem(Item items) {
-        this.items.add(items);
+    public void addItem(Item item) {
+        this.items.add(item);
     }
 
     public Long getId() {

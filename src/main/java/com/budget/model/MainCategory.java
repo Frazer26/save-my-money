@@ -18,7 +18,7 @@ public class MainCategory implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "mainCategory", fetch = FetchType.LAZY)
-    private Set<Item> items;
+    private Set<Item> items = new HashSet<>();
 
     @OneToMany(mappedBy = "mainCategory", fetch = FetchType.LAZY)
     private Set<SubCategory> subCategories = new HashSet<>();
@@ -34,16 +34,16 @@ public class MainCategory implements Serializable {
         return items;
     }
 
-    public void setItems(Set<Item> items) {
-        this.items = items;
+    public void addItem(Item item) {
+        this.items.add(item);
     }
 
     public Set<SubCategory> getSubCategories() {
         return subCategories;
     }
 
-    public void addSubCategory(SubCategory subCategories) {
-        this.subCategories.add(subCategories);
+    public void addSubCategory(SubCategory subCategory) {
+        this.subCategories.add(subCategory);
     }
 
     public Long getId() {
