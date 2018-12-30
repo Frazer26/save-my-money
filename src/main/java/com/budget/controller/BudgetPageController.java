@@ -9,7 +9,6 @@ import com.budget.repository.SubCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
@@ -36,10 +35,13 @@ public class BudgetPageController {
         SubCategory subCategory = new SubCategory("TestSubCategory", testCategory);
         subCategoryRepository.save(subCategory);
 
-        Item item = new Item.ItemBuilder("TestElectricity",2000)
+        Item item = new Item.ItemBuilder("TestElectricity", 2000)
                 .belongsToSubCategory(subCategory)
                 .build();
         itemRepository.save(item);
+
+        displayCategoriesWithDummyData();
+
 
         return "Saved test data";
     }
@@ -54,21 +56,30 @@ public class BudgetPageController {
         DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern("yyyy MMMM");
         return thisMonth.format(monthYearFormatter);
     }
-
+    @RequestMapping(value = "/testSave", method = RequestMethod.GET)
     public String displayCategoriesWithDummyData() {
-        Date currentDate = new Date(2);
+        Date currentDate = new Date(2018,12,30);
+
         MainCategory income = new MainCategory("Income");
+        mainCategoryRepository.save(income);
+
         SubCategory company = new SubCategory("Epam", income);
+        subCategoryRepository.save(company);
+
         Item companyMonthlySalary = new Item
                 .ItemBuilder("Epam monthly salary", 180000)
                 .attachDate(currentDate)
                 .belongsToSubCategory(company)
                 .build();
+        itemRepository.save(companyMonthlySalary);
+
         Item cafeteria = new Item
                 .ItemBuilder("Cafeteria", 20000)
                 .attachDate(currentDate)
                 .belongsToSubCategory(company)
                 .build();
+        itemRepository.save(cafeteria);
+
         String display = income.toString() + " " + company.toString() + " " + companyMonthlySalary.toString() + " " +
                 cafeteria.toString();
         return display;
