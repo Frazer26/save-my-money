@@ -2,8 +2,8 @@ package com.budget.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity  //This tells Hibernate to make a table out of this class
 public class MainCategory implements Serializable {
@@ -18,10 +18,10 @@ public class MainCategory implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "mainCategory", fetch = FetchType.LAZY)
-    private Set<Item> items = new HashSet<>();
+    private List<Item> items = new ArrayList<>();
 
     @OneToMany(mappedBy = "mainCategory", fetch = FetchType.LAZY)
-    private Set<SubCategory> subCategories = new HashSet<>();
+    private List<SubCategory> subCategories = new ArrayList<>();
 
     public MainCategory() {
     }
@@ -30,7 +30,7 @@ public class MainCategory implements Serializable {
         this.name = name;
     }
 
-    public Set<Item> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 
@@ -38,7 +38,7 @@ public class MainCategory implements Serializable {
         this.items.add(item);
     }
 
-    public Set<SubCategory> getSubCategories() {
+    public List<SubCategory> getSubCategories() {
         return subCategories;
     }
 

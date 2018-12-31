@@ -2,8 +2,8 @@ package com.budget.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class SubCategory implements Serializable {
@@ -22,7 +22,7 @@ public class SubCategory implements Serializable {
     private MainCategory mainCategory;
 
     @OneToMany(mappedBy = "subCategory", fetch = FetchType.LAZY)
-    private Set<Item> items = new HashSet<>();
+    private List<Item> items = new ArrayList<>();
 
     public SubCategory() {
     }
@@ -32,7 +32,7 @@ public class SubCategory implements Serializable {
         this.mainCategory = mainCategory;
     }
 
-    public Set<Item> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 

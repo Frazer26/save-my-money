@@ -18,6 +18,7 @@ public class Item implements Serializable {
 
     private String name;
 
+    @Column(nullable = false)
     private Integer money;
 
     private Date date;
