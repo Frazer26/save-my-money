@@ -15,13 +15,14 @@ public class SubCategory implements Serializable {
     @Column(name = "sub_id")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "main_id", nullable = false)
     private MainCategory mainCategory;
 
-    @OneToMany(mappedBy = "subCategory", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "subCategory")
     private List<Item> items = new ArrayList<>();
 
     public SubCategory() {

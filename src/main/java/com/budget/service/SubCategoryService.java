@@ -20,11 +20,11 @@ public class SubCategoryService {
     }
 
     public SubCategory addSubCategory(SubCategory subCategory) {
-        return subCategoryRepository.save(subCategory);
+        return subCategoryRepository.saveAndFlush(subCategory);
     }
 
-    public void deleteSubCategory(Long id) {
-        subCategoryRepository.deleteById(id);
+    public void deleteSubCategory(SubCategory subCategory) {
+        subCategoryRepository.delete(subCategory);
     }
 
     public int countMoneyUnderSubCat(SubCategory subCategory) {

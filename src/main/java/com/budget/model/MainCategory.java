@@ -15,12 +15,13 @@ public class MainCategory implements Serializable {
     @Column(name = "main_id")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "mainCategory", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "mainCategory")
     private List<Item> items = new ArrayList<>();
 
-    @OneToMany(mappedBy = "mainCategory", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "mainCategory")
     private List<SubCategory> subCategories = new ArrayList<>();
 
     public MainCategory() {

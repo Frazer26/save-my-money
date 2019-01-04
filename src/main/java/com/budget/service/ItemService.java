@@ -18,10 +18,10 @@ public class ItemService {
     }
 
     public Item addItem(Item item) {
-        return itemRepository.save(item);
+        return itemRepository.saveAndFlush(item);
     }
 
-    public void deleteItem(Long id) {
-        itemRepository.deleteById(id);
+    public void deleteItem(Item item) {
+        itemRepository.delete(item);
     }
 }

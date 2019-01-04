@@ -16,6 +16,7 @@ public class Item implements Serializable {
     @Column(name = "item_id")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
@@ -23,7 +24,7 @@ public class Item implements Serializable {
 
     private Date date;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "sub_id", nullable = false)
     private SubCategory subCategory;
 

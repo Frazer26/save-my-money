@@ -21,11 +21,15 @@ public class MainCategoryService {
     }
 
     public MainCategory addMainCategory(MainCategory mainCategory) {
-        return mainCategoryRepository.save(mainCategory);
+        return mainCategoryRepository.saveAndFlush(mainCategory);
     }
 
-    public void deleteMainCategory(Long id) {
-        mainCategoryRepository.deleteById(id);
+    public void deleteMainCategory(MainCategory mainCategory) {
+        mainCategoryRepository.delete(mainCategory);
+    }
+
+    public List<MainCategory> mainCategoryList() {
+        return mainCategoryRepository.findAll();
     }
 
     public int countMoneyUnderMainCat(MainCategory mainCategory) {
