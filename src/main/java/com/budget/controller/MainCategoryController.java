@@ -3,24 +3,31 @@ package com.budget.controller;
 import com.budget.model.MainCategory;
 import com.budget.service.MainCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class MainCategoryController {
 
-    @Autowired
     private MainCategoryService mainCategoryService;
 
-    @RequestMapping(value = "/budget/saveMainCategory", method = RequestMethod.POST)
-    public MainCategory newMainCategory(@RequestBody MainCategory mainCategory) {
+    @Autowired
+    public MainCategoryController(MainCategoryService mainCategoryService) {
+        this.mainCategoryService = mainCategoryService;
+    }
+
+    @PostMapping(value = "/budget/saveMainCategory")
+    public MainCategory saveMainCategory(@RequestBody MainCategory mainCategory) {
         return mainCategoryService.addMainCategory(mainCategory);
     }
 
-    @RequestMapping(value = "/budget/deleteMainCategory", method = RequestMethod.POST)
-    public void deleteMainCategory(@RequestBody MainCategory mainCategory) {
-        mainCategoryService.deleteMainCategory(mainCategory);
+    @DeleteMapping(value = "/budget/deleteMainCategory/{mainCategoryId}")
+    public ResponseEntity<?> deleteMainCategory(@PathVariable (value = "mainCategoryId") Long mainCategoryId) throws Exception {
+        return mainCategoryService.getMainCategoryById(mainCategoryId).map(mainCategory -> {
+            mainCategoryService.deleteMainCategory(mainCategory);
+            return ResponseEntity.ok().build();
+        }).orElseThrow(Exception::new);
+
     }
 }

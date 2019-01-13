@@ -19,6 +19,10 @@ public class SubCategoryService {
         return subCategoryRepository.findById(id);
     }
 
+    public Optional<SubCategory> getSubCategoryByIdAndMainCategoryId(Long id, Long mainCategoryId) {
+        return subCategoryRepository.findSubCategoryByIdAndMainCategory_Id(id,mainCategoryId);
+    }
+
     public SubCategory addSubCategory(SubCategory subCategory) {
         return subCategoryRepository.saveAndFlush(subCategory);
     }

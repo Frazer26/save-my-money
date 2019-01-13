@@ -1,24 +1,28 @@
-<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/mainCategoryModification.js"></script>
+
 <head>
     <meta charset="UTF-8">
     <title>Budget</title>
 </head>
 <body>
-
-<div>
-    <th:block th:each="maincat : ${mainCategories}">
-        <div th:text="${maincat.name}">MainCategory Name</div>
-        <div th:if="${!maincat.items.empty}"
-             th:text="${maincat.items}">Item of MainCategory
-        </div>
-        <th:block th:each="subcat : ${maincat.subCategories}">
-            <div th:text="${subcat.name}">Subcat of MainCategory</div>
-            <th:block th:each="item : ${subcat.items}">
-                <div th:text="${item.name} + ${item.money}">Item's name/money Of Subcat of MainCategory</div>
+<form>
+    <div>
+        <th:block th:each="maincat : ${mainCategories}">
+            <div th:text="${maincat.name}">MainCategory Name</div>
+                 <input id="saveMainCategory" type="text" name="newCategory"  placeholder="Type here..."><br>
+            <div th:if="${!maincat.items.empty}"
+                 th:text="${maincat.items}">Item of MainCategory
+            </div>
+            <th:block th:each="subcat : ${maincat.subCategories}">
+                <div th:text="${subcat.name}">Subcat of MainCategory</div>
+                <th:block th:each="item : ${subcat.items}">
+                    <div th:text="${item.name} + ${item.money}">Item's name/money Of Subcat of MainCategory</div>
+                </th:block>
             </th:block>
         </th:block>
-    </th:block>
-</div>
+    </div>
+</form>
 </body>
 </html>
