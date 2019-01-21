@@ -12,8 +12,12 @@ import java.util.Optional;
 @Service
 public class SubCategoryService {
 
+    private SubCategoryRepository subCategoryRepository;
+
     @Autowired
-    SubCategoryRepository subCategoryRepository;
+    public SubCategoryService(SubCategoryRepository subCategoryRepository) {
+        this.subCategoryRepository = subCategoryRepository;
+    }
 
     public Optional<SubCategory> getSubCategoryById(Long id) {
         return subCategoryRepository.findById(id);
@@ -34,7 +38,7 @@ public class SubCategoryService {
     public int countMoneyUnderSubCat(SubCategory subCategory) {
         List<Item> items = subCategory.getItems();
         return items.stream()
-                .mapToInt(item -> item.getMoney())
+                .mapToInt(Item::getMoney)
                 .sum();
     }
 }

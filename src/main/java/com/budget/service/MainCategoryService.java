@@ -13,8 +13,12 @@ import java.util.Optional;
 @Service
 public class MainCategoryService {
 
-    @Autowired
     private MainCategoryRepository mainCategoryRepository;
+
+    @Autowired
+    public MainCategoryService(MainCategoryRepository mainCategoryRepository) {
+        this.mainCategoryRepository = mainCategoryRepository;
+    }
 
     public Optional<MainCategory> getMainCategoryById(Long id) {
         return mainCategoryRepository.findById(id);
@@ -36,22 +40,24 @@ public class MainCategoryService {
         List<SubCategory> subcategories = mainCategory.getSubCategories();
         List<Item> items = mainCategory.getItems();
 
+        int money = countMoneyIfSubCatEmpty(items);
+
         if (!subcategories.isEmpty()) {
-            return countMoneyIfSubCatNotEmpty(subcategories);
+            money = countMoneyIfSubCatNotEmpty(subcategories);
         }
-        return countMoneyIfSubCatEmpty(items);
+        return money;
     }
 
     private int countMoneyIfSubCatEmpty(List<Item> items) {
         return items.stream()
-                .mapToInt(item -> item.getMoney())
+                .mapToInt(Item::getMoney)
                 .sum();
     }
 
     private int countMoneyIfSubCatNotEmpty(List<SubCategory> subcategories) {
         return subcategories.stream()
                 .flatMap(subCat -> subCat.getItems().stream())
-                .mapToInt(item -> item.getMoney())
+                .mapToInt(Item::getMoney)
                 .sum();
     }
 

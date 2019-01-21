@@ -10,8 +10,12 @@ import java.util.Optional;
 @Service
 public class ItemService {
 
+    private ItemRepository itemRepository;
+
     @Autowired
-    ItemRepository itemRepository;
+    public ItemService(ItemRepository itemRepository) {
+        this.itemRepository = itemRepository;
+    }
 
     public Optional<Item> getItemById(Long id) {
         return itemRepository.findById(id);

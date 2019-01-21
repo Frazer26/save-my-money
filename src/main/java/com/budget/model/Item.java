@@ -25,7 +25,7 @@ public class Item implements Serializable {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "sub_id", nullable = false)
+    @JoinColumn(name = "sub_id")
     private SubCategory subCategory;
 
     @ManyToOne
