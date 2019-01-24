@@ -1,8 +1,6 @@
 package com.budget.controller;
 
-import com.budget.service.ItemService;
 import com.budget.service.MainCategoryService;
-import com.budget.service.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,14 +12,12 @@ import java.time.format.DateTimeFormatter;
 @Controller
 public class BudgetPageController {
 
-    @Autowired
-    private MainCategoryService mainCategoryService;
+    private final MainCategoryService mainCategoryService;
 
     @Autowired
-    private SubCategoryService subCategoryService;
-
-    @Autowired
-    private ItemService itemService;
+    public BudgetPageController(MainCategoryService mainCategoryService) {
+        this.mainCategoryService = mainCategoryService;
+    }
 
     @GetMapping(value = "/budget")
     public String budgetView(Model model) {

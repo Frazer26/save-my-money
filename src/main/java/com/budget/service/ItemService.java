@@ -33,7 +33,7 @@ public class ItemService {
         return itemRepository.saveAndFlush(item);
     }
 
-    public void deleteItem(Item item) {
-        itemRepository.delete(item);
+    public void deleteItem(Long id) {
+        itemRepository.deleteItemById(id);
     }
 }

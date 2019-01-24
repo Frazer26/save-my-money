@@ -28,8 +28,8 @@ public class MainCategoryService {
         return mainCategoryRepository.saveAndFlush(mainCategory);
     }
 
-    public void deleteMainCategory(MainCategory mainCategory) {
-        mainCategoryRepository.delete(mainCategory);
+    public void deleteMainCategory(Long id) {
+        mainCategoryRepository.deleteMainCategoryById(id);
     }
 
     public List<MainCategory> mainCategoryList() {

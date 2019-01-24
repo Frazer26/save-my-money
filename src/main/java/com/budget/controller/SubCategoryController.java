@@ -5,10 +5,11 @@ import com.budget.service.MainCategoryService;
 import com.budget.service.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.Optional;
+
+@RestController
 public class SubCategoryController {
 
     private SubCategoryService subCategoryService;
@@ -31,11 +32,24 @@ public class SubCategoryController {
     }
 
     @DeleteMapping(value = "/budget/mainCategory/{mainId}/subCategory/{subCategoryId}")
-    public ResponseEntity<?> deleteSubCategory(@PathVariable(value = "mainId") Long mainId,
-                                             @PathVariable(value = "subCategoryId") Long subId) throws Exception {
-        return subCategoryService.getSubCategoryByIdAndMainCategoryId(subId, mainId).map(subCategory -> {
-            subCategoryService.deleteSubCategory(subCategory);
-            return ResponseEntity.ok().build();
-        }).orElseThrow(Exception::new);
+    public ResponseEntity<?> deleteSubCategory(@PathVariable(value = "subCategoryId") Long subId) {
+        subCategoryService.deleteSubCategory(subId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "budget/updateSubCategory/{subCategoryId}")
+    public ResponseEntity updateSubCategory(@PathVariable(value = "subCategoryId") Long id,
+                                            @RequestBody SubCategory subCategoryFromRequest) {
+        ResponseEntity responseEntity;
+        Optional<SubCategory> subCategoryFromDB = subCategoryService.getSubCategoryById(id);
+
+        if(!subCategoryFromDB.isPresent()) {
+            responseEntity = ResponseEntity.notFound().build();
+        } else {
+            subCategoryFromRequest.setId(id);
+            subCategoryService.addSubCategory(subCategoryFromRequest);
+            responseEntity = ResponseEntity.ok().build();
+        }
+        return responseEntity;
     }
 }

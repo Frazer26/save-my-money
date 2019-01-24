@@ -31,8 +31,8 @@ public class SubCategoryService {
         return subCategoryRepository.saveAndFlush(subCategory);
     }
 
-    public void deleteSubCategory(SubCategory subCategory) {
-        subCategoryRepository.delete(subCategory);
+    public void deleteSubCategory(Long id) {
+        subCategoryRepository.deleteSubCategoryById(id);
     }
 
     public int countMoneyUnderSubCat(SubCategory subCategory) {

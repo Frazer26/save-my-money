@@ -6,12 +6,11 @@ import com.budget.service.MainCategoryService;
 import com.budget.service.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.Optional;
+
+@RestController
 public class ItemController {
 
     private ItemService itemService;
@@ -28,9 +27,10 @@ public class ItemController {
         this.subCategoryService = subCategoryService;
     }
 
+    //TODO: rewrite save item methods
     @PostMapping(value = "/budget/mainCategory/{mainId}/saveItem")
     public Item saveItemInMainCategory(@PathVariable(value = "mainId") Long mainId,
-                                      @RequestBody Item item) throws Exception {
+                                       @RequestBody Item item) throws Exception {
         return mainCategoryService.getMainCategoryById(mainId).map(mainCategory -> {
             item.setMainCategory(mainCategory);
             return itemService.addItem(item);
@@ -46,21 +46,27 @@ public class ItemController {
         }).orElseThrow(Exception::new);
     }
 
-    @PostMapping(value = "/budget/mainCategory/{mainId}/item/{itemId}")
-    public ResponseEntity<?> deleteItemFromMainCategory(@PathVariable (value = "mainId") Long mainId,
-                                     @PathVariable (value = "itemId") Long itemId) throws Exception {
-        return itemService.getItemByIdAndMainCategoryId(itemId,mainId).map(item -> {
-            itemService.deleteItem(item);
-            return ResponseEntity.ok().build();
-        }).orElseThrow(Exception::new);
+    @DeleteMapping(value = "/budget/item/{itemId}")
+    public ResponseEntity<?> deleteItem(@PathVariable(value = "itemId") Long itemId) {
+        itemService.deleteItem(itemId);
+        return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/budget/subCategory/{subId}/item/{itemId}")
-    public ResponseEntity<?> deleteItemFromSubCategory(@PathVariable (value = "subId") Long subId,
-                                     @PathVariable (value = "itemId") Long itemId) throws Exception {
-        return itemService.getItemByIdAndSubCategoryId(itemId,subId).map(item -> {
-            itemService.deleteItem(item);
-            return ResponseEntity.ok().build();
-        }).orElseThrow(Exception::new);
+    @PutMapping(value = "budget/updateItem/{itemId}")
+    public ResponseEntity<?> updateItem(@PathVariable(value = "itemId") Long id,
+                                        @RequestBody Item itemFromRequest) {
+        ResponseEntity responseEntity;
+        Optional<Item> itemFromDB = itemService.getItemById(id);
+
+        if (!itemFromDB.isPresent()) {
+            responseEntity = ResponseEntity.notFound().build();
+        } else {
+            itemFromRequest.setId(id);
+            itemService.addItem(itemFromRequest);
+            responseEntity = ResponseEntity.ok().build();
+        }
+
+        return responseEntity;
     }
+
 }
