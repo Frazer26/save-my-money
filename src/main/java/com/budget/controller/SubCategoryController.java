@@ -1,5 +1,6 @@
 package com.budget.controller;
 
+import com.budget.model.MainCategory;
 import com.budget.model.SubCategory;
 import com.budget.service.MainCategoryService;
 import com.budget.service.SubCategoryService;
@@ -13,7 +14,6 @@ import java.util.Optional;
 public class SubCategoryController {
 
     private SubCategoryService subCategoryService;
-
     private MainCategoryService mainCategoryService;
 
     @Autowired
@@ -24,14 +24,20 @@ public class SubCategoryController {
 
     @PostMapping(value = "/budget/mainCategory/{mainId}/saveSubCategory")
     public SubCategory saveSubCategory(@PathVariable(value = "mainId") Long mainId,
-                                       @RequestBody SubCategory subCategory) throws Exception {
-        return mainCategoryService.getMainCategoryById(mainId).map(mainCategory -> {
-            subCategory.setMainCategory(mainCategory);
-            return subCategoryService.addSubCategory(subCategory);
-        }).orElseThrow(Exception::new);
+                                       @RequestBody SubCategory subCategoryFromRequest) {
+        SubCategory subCategory;
+        Optional<MainCategory> mainCategoryOptional = mainCategoryService.getMainCategoryById(mainId);
+        if(mainCategoryOptional.isPresent()) {
+            MainCategory mainCat = mainCategoryOptional.get();
+            subCategoryFromRequest.setMainCategory(mainCat);
+            subCategory = subCategoryService.addSubCategory(subCategoryFromRequest);
+        } else {
+            subCategory = null;
+        }
+        return subCategory;
     }
 
-    @DeleteMapping(value = "/budget/mainCategory/{mainId}/subCategory/{subCategoryId}")
+    @DeleteMapping(value = "/budget/deleteSubCategory/{subCategoryId}")
     public ResponseEntity<?> deleteSubCategory(@PathVariable(value = "subCategoryId") Long subId) {
         subCategoryService.deleteSubCategory(subId);
         return ResponseEntity.ok().build();

@@ -1,6 +1,8 @@
 package com.budget.controller;
 
 import com.budget.model.Item;
+import com.budget.model.MainCategory;
+import com.budget.model.SubCategory;
 import com.budget.service.ItemService;
 import com.budget.service.MainCategoryService;
 import com.budget.service.SubCategoryService;
@@ -14,9 +16,7 @@ import java.util.Optional;
 public class ItemController {
 
     private ItemService itemService;
-
     private MainCategoryService mainCategoryService;
-
     private SubCategoryService subCategoryService;
 
     @Autowired
@@ -27,23 +27,34 @@ public class ItemController {
         this.subCategoryService = subCategoryService;
     }
 
-    //TODO: rewrite save item methods
     @PostMapping(value = "/budget/mainCategory/{mainId}/saveItem")
     public Item saveItemInMainCategory(@PathVariable(value = "mainId") Long mainId,
-                                       @RequestBody Item item) throws Exception {
-        return mainCategoryService.getMainCategoryById(mainId).map(mainCategory -> {
-            item.setMainCategory(mainCategory);
-            return itemService.addItem(item);
-        }).orElseThrow(Exception::new);
+                                       @RequestBody Item itemFromRequest) {
+        Item item;
+        Optional<MainCategory> mainCategoryOptional = mainCategoryService.getMainCategoryById(mainId);
+        if (mainCategoryOptional.isPresent()) {
+            MainCategory mainCat = mainCategoryOptional.get();
+            itemFromRequest.setMainCategory(mainCat);
+            item = itemService.addItem(itemFromRequest);
+        } else {
+            item = null;
+        }
+        return item;
     }
 
     @PostMapping(value = "/budget/subCategory/{subId}/saveItem")
     public Item saveItemInSubCategory(@PathVariable(value = "subId") Long subId,
-                                      @RequestBody Item item) throws Exception {
-        return subCategoryService.getSubCategoryById(subId).map(subCategory -> {
-            item.setSubCategory(subCategory);
-            return itemService.addItem(item);
-        }).orElseThrow(Exception::new);
+                                      @RequestBody Item itemFromRequest) {
+        Item item;
+        Optional<SubCategory> subCategoryOptional = subCategoryService.getSubCategoryById(subId);
+        if (subCategoryOptional.isPresent()) {
+            SubCategory subCat = subCategoryOptional.get();
+            itemFromRequest.setSubCategory(subCat);
+            item = itemService.addItem(itemFromRequest);
+        } else {
+            item = null;
+        }
+        return item;
     }
 
     @DeleteMapping(value = "/budget/item/{itemId}")
