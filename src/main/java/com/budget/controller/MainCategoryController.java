@@ -5,7 +5,9 @@ import com.budget.service.MainCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
 
 @RestController
@@ -19,18 +21,23 @@ public class MainCategoryController {
     }
 
     @PostMapping(value = "/budget/saveMainCategory")
-    public MainCategory saveMainCategory(@RequestBody MainCategory mainCategory) {
-        return mainCategoryService.addMainCategory(mainCategory);
+    public ResponseEntity<Object> saveMainCategory(@RequestBody MainCategory mainCategoryFromRequest) {
+        ResponseEntity responseEntity;
+        MainCategory mainCategory = mainCategoryService.addMainCategory(mainCategoryFromRequest);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(mainCategory.getId()).toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     @DeleteMapping(value = "/budget/deleteMainCategory/{mainCategoryId}")
-    public ResponseEntity<?> deleteMainCategory(@PathVariable(value = "mainCategoryId") Long mainCategoryId) {
+    public void deleteMainCategory(@PathVariable(value = "mainCategoryId") Long mainCategoryId) {
         mainCategoryService.deleteMainCategory(mainCategoryId);
-        return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "budget/updateMainCategory/{mainCategoryId}")
-    public ResponseEntity<?> updateMainCategory(@PathVariable(value = "mainCategoryId") Long id,
+    public ResponseEntity updateMainCategory(@PathVariable(value = "mainCategoryId") Long id,
                                                 @RequestBody MainCategory mainCategoryFromRequest) {
         ResponseEntity responseEntity;
         Optional<MainCategory> mainCategoryFromDB = mainCategoryService.getMainCategoryById(id);

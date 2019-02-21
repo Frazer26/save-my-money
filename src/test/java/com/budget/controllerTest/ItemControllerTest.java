@@ -43,37 +43,37 @@ public class ItemControllerTest {
             testSaveItemInMainCategoryWhenDBContainsMainCategory
      */
 
-    @Test
-    public void testSaveItemInSubCategoryWhenDBContainsSubCategory() {
-        SubCategory testSubCategory = createSubCategory();
-        Item testItem = createItem();
-
-        expect(mockedSubCategoryService.getSubCategoryById((long) 0)).andReturn(Optional.of(testSubCategory));
-        expect(mockedItemService.addItem(anyObject())).andReturn(testItem);
-        replay(mockedSubCategoryService, mockedItemService);
-
-        Item item = itemController.saveItemInSubCategory(anyLong(), testItem);
-
-        assertEquals(item, testItem);
-
-        verify(mockedSubCategoryService, mockedItemService);
-    }
-
-
-    @Test
-    public void testDeleteItemWhenItemDeletedFromDB() {
-        ResponseEntity testResponseEntity = new ResponseEntity(HttpStatus.OK);
-
-        mockedItemService.deleteItem(anyLong());
-        expectLastCall();
-        replay(mockedItemService);
-
-        ResponseEntity responseEntity = itemController.deleteItem(anyLong());
-
-        assertEquals(testResponseEntity, responseEntity);
-
-        verify(mockedItemService);
-    }
+//    @Test
+//    public void testSaveItemInSubCategoryWhenDBContainsSubCategory() {
+//        SubCategory testSubCategory = createSubCategory();
+//        Item testItem = createItem();
+//
+//        expect(mockedSubCategoryService.getSubCategoryById(0L)).andReturn(Optional.of(testSubCategory));
+//        expect(mockedItemService.addItem(anyObject())).andReturn(testItem);
+//        replay(mockedSubCategoryService, mockedItemService);
+//
+//        Item item = itemController.saveItemInSubCategory(anyLong(), testItem);
+//
+//        assertEquals(item, testItem);
+//
+//        verify(mockedSubCategoryService, mockedItemService);
+//    }
+//
+//
+//    @Test
+//    public void testDeleteItemWhenItemDeletedFromDB() {
+//        ResponseEntity testResponseEntity = new ResponseEntity(HttpStatus.OK);
+//
+//        mockedItemService.deleteItem(anyLong());
+//        expectLastCall();
+//        replay(mockedItemService);
+//
+//        ResponseEntity responseEntity = itemController.deleteItem(anyLong());
+//
+//        assertEquals(testResponseEntity, responseEntity);
+//
+//        verify(mockedItemService);
+//    }
 
 
     @Test
@@ -81,7 +81,7 @@ public class ItemControllerTest {
         Item testItem = createItem();
         ResponseEntity testResponseEntity = new ResponseEntity(HttpStatus.OK);
 
-        expect(mockedItemService.getItemById((long) 0)).andReturn(Optional.of(testItem));
+        expect(mockedItemService.getItemById(0L)).andReturn(Optional.of(testItem));
         expect(mockedItemService.addItem(anyObject())).andReturn(testItem);
         replay(mockedItemService);
 
@@ -97,7 +97,7 @@ public class ItemControllerTest {
         Item testItem = createItem();
         ResponseEntity testResponseEntity = new ResponseEntity(HttpStatus.NOT_FOUND);
 
-        expect(mockedItemService.getItemById((long) 0)).andReturn(Optional.empty());
+        expect(mockedItemService.getItemById(0L)).andReturn(Optional.empty());
         replay(mockedItemService);
 
         ResponseEntity responseEntity = itemController.updateItem(anyLong(), testItem);
@@ -115,8 +115,7 @@ public class ItemControllerTest {
     }
 
     private SubCategory createSubCategory() {
-        MainCategory mainCategory = new MainCategory(MAIN_CATEGORY_NAME);
-        SubCategory subCategory = new SubCategory(SUB_CATEGORY_NAME, mainCategory);
+        SubCategory subCategory = new SubCategory(SUB_CATEGORY_NAME);
         return subCategory;
     }
 }

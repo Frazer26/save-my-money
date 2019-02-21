@@ -9,7 +9,9 @@ import com.budget.service.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
 
 @RestController
@@ -28,43 +30,52 @@ public class ItemController {
     }
 
     @PostMapping(value = "/budget/mainCategory/{mainId}/saveItem")
-    public Item saveItemInMainCategory(@PathVariable(value = "mainId") Long mainId,
+    public ResponseEntity<Object> saveItemInMainCategory(@PathVariable(value = "mainId") Long mainId,
                                        @RequestBody Item itemFromRequest) {
-        Item item;
+        ResponseEntity responseEntity;
         Optional<MainCategory> mainCategoryOptional = mainCategoryService.getMainCategoryById(mainId);
         if (mainCategoryOptional.isPresent()) {
             MainCategory mainCat = mainCategoryOptional.get();
             itemFromRequest.setMainCategory(mainCat);
-            item = itemService.addItem(itemFromRequest);
+            Item item = itemService.addItem(itemFromRequest);
+
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(item.getId()).toUri();
+
+            responseEntity = ResponseEntity.created(location).build();
         } else {
-            item = null;
+            responseEntity = ResponseEntity.notFound().build();
         }
-        return item;
+        return responseEntity;
     }
 
     @PostMapping(value = "/budget/subCategory/{subId}/saveItem")
-    public Item saveItemInSubCategory(@PathVariable(value = "subId") Long subId,
+    public ResponseEntity<Object> saveItemInSubCategory(@PathVariable(value = "subId") Long subId,
                                       @RequestBody Item itemFromRequest) {
-        Item item;
+        ResponseEntity responseEntity;
         Optional<SubCategory> subCategoryOptional = subCategoryService.getSubCategoryById(subId);
         if (subCategoryOptional.isPresent()) {
             SubCategory subCat = subCategoryOptional.get();
             itemFromRequest.setSubCategory(subCat);
-            item = itemService.addItem(itemFromRequest);
+            Item item = itemService.addItem(itemFromRequest);
+
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(item.getId()).toUri();
+
+            responseEntity = ResponseEntity.created(location).build();
         } else {
-            item = null;
+            responseEntity = ResponseEntity.notFound().build();
         }
-        return item;
+        return responseEntity;
     }
 
     @DeleteMapping(value = "/budget/item/{itemId}")
-    public ResponseEntity<?> deleteItem(@PathVariable(value = "itemId") Long itemId) {
+    public void deleteItem(@PathVariable(value = "itemId") Long itemId) {
         itemService.deleteItem(itemId);
-        return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "budget/updateItem/{itemId}")
-    public ResponseEntity<?> updateItem(@PathVariable(value = "itemId") Long id,
+    public ResponseEntity updateItem(@PathVariable(value = "itemId") Long id,
                                         @RequestBody Item itemFromRequest) {
         ResponseEntity responseEntity;
         Optional<Item> itemFromDB = itemService.getItemById(id);

@@ -5,6 +5,9 @@ import com.budget.model.MainCategory;
 import com.budget.service.MainCategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -19,38 +22,39 @@ public class MainCategoryControllerTest {
 
     private MainCategoryService mockedMainCatService;
     private MainCategoryController mainCategoryController;
+    private MockHttpServletRequest request;
 
     @BeforeMethod
     public void setup() {
         mockedMainCatService = createMock(MainCategoryService.class);
         mainCategoryController = new MainCategoryController(mockedMainCatService);
+        request = new MockHttpServletRequest();
     }
 
     @Test
     public void testSaveMainCategoryWhenMainCategoryNotEmpty() {
         MainCategory testMainCategory = createTestMainCategory();
+        testMainCategory.setId(1L);
+        request.setRequestURI("/budget/saveMainCategory");
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(this.request));
 
-        expect(mockedMainCatService.addMainCategory(new MainCategory())).andReturn(testMainCategory);
+
+        expect(mockedMainCatService.addMainCategory(testMainCategory)).andReturn(testMainCategory);
         replay(mockedMainCatService);
 
-        MainCategory mainCategory = mainCategoryController.saveMainCategory(new MainCategory());
+        ResponseEntity<Object> responseEntity = mainCategoryController.saveMainCategory(testMainCategory);
 
-        assertEquals(mainCategory.getName(), testMainCategory.getName());
+        assertEquals("{Location=[http://localhost/budget/saveMainCategory/1]}", responseEntity.getHeaders().toString());
+        assertEquals(201,responseEntity.getStatusCode().value());
 
         verify(mockedMainCatService);
     }
 
     @Test
-    public void testDeleteMainCategoryWhenResponseEntityValue200() {
-        ResponseEntity testResponseEntity = new ResponseEntity(HttpStatus.OK);
-
+    public void testDeleteMainCategory() {
         mockedMainCatService.deleteMainCategory(anyLong());
         expectLastCall();
         replay(mockedMainCatService);
-
-        ResponseEntity responseEntity = mainCategoryController.deleteMainCategory(anyLong());
-
-        assertEquals(responseEntity, testResponseEntity);
 
         verify(mockedMainCatService);
     }
@@ -75,7 +79,7 @@ public class MainCategoryControllerTest {
     public void testUpdateMainCategoryWhenNotFoundMainCategoryInDB() {
         ResponseEntity testResponseEntity = new ResponseEntity(HttpStatus.NOT_FOUND);
 
-        expect(mockedMainCatService.getMainCategoryById((long) 0)).andReturn(Optional.empty());
+        expect(mockedMainCatService.getMainCategoryById(0L)).andReturn(Optional.empty());
         replay(mockedMainCatService);
 
         ResponseEntity responseEntity = mainCategoryController.updateMainCategory(anyLong(), new MainCategory());

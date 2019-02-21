@@ -7,7 +7,9 @@ import com.budget.service.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
 
 @RestController
@@ -23,24 +25,28 @@ public class SubCategoryController {
     }
 
     @PostMapping(value = "/budget/mainCategory/{mainId}/saveSubCategory")
-    public SubCategory saveSubCategory(@PathVariable(value = "mainId") Long mainId,
+    public ResponseEntity<Object> saveSubCategory(@PathVariable(value = "mainId") Long mainId,
                                        @RequestBody SubCategory subCategoryFromRequest) {
-        SubCategory subCategory;
+        ResponseEntity responseEntity;
         Optional<MainCategory> mainCategoryOptional = mainCategoryService.getMainCategoryById(mainId);
         if(mainCategoryOptional.isPresent()) {
             MainCategory mainCat = mainCategoryOptional.get();
             subCategoryFromRequest.setMainCategory(mainCat);
-            subCategory = subCategoryService.addSubCategory(subCategoryFromRequest);
+            SubCategory subCategory = subCategoryService.addSubCategory(subCategoryFromRequest);
+
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(subCategory.getId()).toUri();
+
+            responseEntity = ResponseEntity.created(location).build();
         } else {
-            subCategory = null;
+            responseEntity = ResponseEntity.notFound().build();
         }
-        return subCategory;
+        return responseEntity;
     }
 
     @DeleteMapping(value = "/budget/deleteSubCategory/{subCategoryId}")
-    public ResponseEntity<?> deleteSubCategory(@PathVariable(value = "subCategoryId") Long subId) {
+    public void deleteSubCategory(@PathVariable(value = "subCategoryId") Long subId) {
         subCategoryService.deleteSubCategory(subId);
-        return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "budget/updateSubCategory/{subCategoryId}")

@@ -28,6 +28,10 @@ public class SubCategory implements Serializable {
     public SubCategory() {
     }
 
+    public SubCategory(String name) {
+        this.name = name;
+    }
+
     public SubCategory(String name, MainCategory mainCategory) {
         this.name = name;
         this.mainCategory = mainCategory;
