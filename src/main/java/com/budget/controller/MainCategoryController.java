@@ -22,7 +22,6 @@ public class MainCategoryController {
 
     @PostMapping(value = "/budget/saveMainCategory")
     public ResponseEntity<Object> saveMainCategory(@RequestBody MainCategory mainCategoryFromRequest) {
-        ResponseEntity responseEntity;
         MainCategory mainCategory = mainCategoryService.addMainCategory(mainCategoryFromRequest);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -38,7 +37,7 @@ public class MainCategoryController {
 
     @PutMapping(value = "budget/updateMainCategory/{mainCategoryId}")
     public ResponseEntity updateMainCategory(@PathVariable(value = "mainCategoryId") Long id,
-                                                @RequestBody MainCategory mainCategoryFromRequest) {
+                                             @RequestBody MainCategory mainCategoryFromRequest) {
         ResponseEntity responseEntity;
         Optional<MainCategory> mainCategoryFromDB = mainCategoryService.getMainCategoryById(id);
 

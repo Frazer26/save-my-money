@@ -26,10 +26,10 @@ public class SubCategoryController {
 
     @PostMapping(value = "/budget/mainCategory/{mainId}/saveSubCategory")
     public ResponseEntity<Object> saveSubCategory(@PathVariable(value = "mainId") Long mainId,
-                                       @RequestBody SubCategory subCategoryFromRequest) {
+                                                  @RequestBody SubCategory subCategoryFromRequest) {
         ResponseEntity responseEntity;
         Optional<MainCategory> mainCategoryOptional = mainCategoryService.getMainCategoryById(mainId);
-        if(mainCategoryOptional.isPresent()) {
+        if (mainCategoryOptional.isPresent()) {
             MainCategory mainCat = mainCategoryOptional.get();
             subCategoryFromRequest.setMainCategory(mainCat);
             SubCategory subCategory = subCategoryService.addSubCategory(subCategoryFromRequest);
@@ -55,7 +55,7 @@ public class SubCategoryController {
         ResponseEntity responseEntity;
         Optional<SubCategory> subCategoryFromDB = subCategoryService.getSubCategoryById(id);
 
-        if(!subCategoryFromDB.isPresent()) {
+        if (!subCategoryFromDB.isPresent()) {
             responseEntity = ResponseEntity.notFound().build();
         } else {
             subCategoryFromRequest.setId(id);

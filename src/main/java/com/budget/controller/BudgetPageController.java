@@ -21,13 +21,13 @@ public class BudgetPageController {
 
     @GetMapping(value = "/budget")
     public String budgetView(Model model) {
-        model.addAttribute("mainCategories", mainCategoryService.mainCategoryList());
+        model.addAttribute("mainCategories", mainCategoryService.getMainCategoryList());
         return "budget";
     }
 
     public String getCurrentMonth() {
         YearMonth thisMonth = YearMonth.now();
-        DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern("yyyy MMMM");
+        DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern("yyyy MM");
         return thisMonth.format(monthYearFormatter);
     }
 

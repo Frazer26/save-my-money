@@ -32,7 +32,7 @@ public class MainCategoryService {
         mainCategoryRepository.deleteMainCategoryById(id);
     }
 
-    public List<MainCategory> mainCategoryList() {
+    public List<MainCategory> getMainCategoryList() {
         return mainCategoryRepository.findAll();
     }
 

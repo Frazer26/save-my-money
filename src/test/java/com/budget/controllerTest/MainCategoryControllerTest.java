@@ -38,14 +38,13 @@ public class MainCategoryControllerTest {
         request.setRequestURI("/budget/saveMainCategory");
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(this.request));
 
-
         expect(mockedMainCatService.addMainCategory(testMainCategory)).andReturn(testMainCategory);
         replay(mockedMainCatService);
 
         ResponseEntity<Object> responseEntity = mainCategoryController.saveMainCategory(testMainCategory);
 
         assertEquals("{Location=[http://localhost/budget/saveMainCategory/1]}", responseEntity.getHeaders().toString());
-        assertEquals(201,responseEntity.getStatusCode().value());
+        assertEquals(201, responseEntity.getStatusCode().value());
 
         verify(mockedMainCatService);
     }
@@ -55,6 +54,8 @@ public class MainCategoryControllerTest {
         mockedMainCatService.deleteMainCategory(anyLong());
         expectLastCall();
         replay(mockedMainCatService);
+
+        mainCategoryController.deleteMainCategory(anyLong());
 
         verify(mockedMainCatService);
     }

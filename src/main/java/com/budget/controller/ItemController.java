@@ -31,7 +31,7 @@ public class ItemController {
 
     @PostMapping(value = "/budget/mainCategory/{mainId}/saveItem")
     public ResponseEntity<Object> saveItemInMainCategory(@PathVariable(value = "mainId") Long mainId,
-                                       @RequestBody Item itemFromRequest) {
+                                                         @RequestBody Item itemFromRequest) {
         ResponseEntity responseEntity;
         Optional<MainCategory> mainCategoryOptional = mainCategoryService.getMainCategoryById(mainId);
         if (mainCategoryOptional.isPresent()) {
@@ -51,7 +51,7 @@ public class ItemController {
 
     @PostMapping(value = "/budget/subCategory/{subId}/saveItem")
     public ResponseEntity<Object> saveItemInSubCategory(@PathVariable(value = "subId") Long subId,
-                                      @RequestBody Item itemFromRequest) {
+                                                        @RequestBody Item itemFromRequest) {
         ResponseEntity responseEntity;
         Optional<SubCategory> subCategoryOptional = subCategoryService.getSubCategoryById(subId);
         if (subCategoryOptional.isPresent()) {
@@ -76,7 +76,7 @@ public class ItemController {
 
     @PutMapping(value = "budget/updateItem/{itemId}")
     public ResponseEntity updateItem(@PathVariable(value = "itemId") Long id,
-                                        @RequestBody Item itemFromRequest) {
+                                     @RequestBody Item itemFromRequest) {
         ResponseEntity responseEntity;
         Optional<Item> itemFromDB = itemService.getItemById(id);
 
