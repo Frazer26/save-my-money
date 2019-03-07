@@ -26,6 +26,13 @@ public class ItemControllerTest {
     private static final String MAIN_CATEGORY_NAME = "Bills";
     private static final String ITEM_NAME = "Electricity";
     private static final Integer ITEM_VALUE = 5000;
+    private static final int STATUS_CODE_404 = 404;
+    private static final long ID = 1L;
+    private static final int STATUS_CODE_201 = 201;
+    private static final String SAVE_ITEM_IN_MAINCAT_METHOD_ENDPOINT = "/budget/mainCategory/1/saveItem";
+    private static final String SAVE_ITEM_IN_MAINCAT_METHOD_RETURNED_URI = "{Location=[http://localhost/budget/mainCategory/1/saveItem/1]}";
+    private static final String SAVE_ITEM_IN_SUBCAT_METHOD_ENDPOINT = "/budget/subCategory/1/saveItem";
+    private static final String SAVE_ITEM_IN_SUBCAT_METHOD_RETURNED_URI = "{Location=[http://localhost/budget/subCategory/1/saveItem/1]}";
 
 
     private SubCategoryService mockedSubCategoryService;
@@ -46,12 +53,12 @@ public class ItemControllerTest {
 
     @Test
     public void testSaveItemInMainCategoryWhenMainCategoryNotExist() {
-        expect(mockedMainCategoryService.getMainCategoryById(1L)).andReturn(Optional.empty());
+        expect(mockedMainCategoryService.getMainCategoryById(ID)).andReturn(Optional.empty());
         replay(mockedMainCategoryService);
 
-        ResponseEntity<Object> responseEntity = itemController.saveItemInMainCategory(1L, createItem());
+        ResponseEntity<Object> responseEntity = itemController.saveItemInMainCategory(ID, createItem());
 
-        assertEquals(404, responseEntity.getStatusCode().value());
+        assertEquals(STATUS_CODE_404, responseEntity.getStatusCode().value());
 
         verify(mockedMainCategoryService);
     }
@@ -60,29 +67,29 @@ public class ItemControllerTest {
     @Test
     public void testSaveItemInMainCategoryWhenItemUnderMainCategory() {
         Item testItem = createItem();
-        request.setRequestURI("/budget/mainCategory/1/saveItem");
+        request.setRequestURI(SAVE_ITEM_IN_MAINCAT_METHOD_ENDPOINT);
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(this.request));
 
-        expect(mockedMainCategoryService.getMainCategoryById(1L)).andReturn(Optional.of(createMainCategory()));
+        expect(mockedMainCategoryService.getMainCategoryById(ID)).andReturn(Optional.of(createMainCategory()));
         expect(mockedItemService.addItem(anyObject())).andReturn(testItem);
         replay(mockedMainCategoryService, mockedItemService);
 
-        ResponseEntity<Object> responseEntity = itemController.saveItemInMainCategory(1L, testItem);
+        ResponseEntity<Object> responseEntity = itemController.saveItemInMainCategory(ID, testItem);
 
-        assertEquals("{Location=[http://localhost/budget/mainCategory/1/saveItem/1]}", responseEntity.getHeaders().toString());
-        assertEquals(201, responseEntity.getStatusCode().value());
+        assertEquals(SAVE_ITEM_IN_MAINCAT_METHOD_RETURNED_URI, responseEntity.getHeaders().toString());
+        assertEquals(STATUS_CODE_201, responseEntity.getStatusCode().value());
 
         verify(mockedMainCategoryService, mockedItemService);
     }
 
     @Test
     public void testSaveItemInSubCategoryWhenSubCategoryNotExist() {
-        expect(mockedSubCategoryService.getSubCategoryById(1L)).andReturn(Optional.empty());
+        expect(mockedSubCategoryService.getSubCategoryById(ID)).andReturn(Optional.empty());
         replay(mockedSubCategoryService);
 
-        ResponseEntity<Object> responseEntity = itemController.saveItemInSubCategory(1L, createItem());
+        ResponseEntity<Object> responseEntity = itemController.saveItemInSubCategory(ID, createItem());
 
-        assertEquals(404, responseEntity.getStatusCode().value());
+        assertEquals(STATUS_CODE_404, responseEntity.getStatusCode().value());
 
         verify(mockedSubCategoryService);
     }
@@ -90,17 +97,17 @@ public class ItemControllerTest {
     @Test
     public void testSaveItemInSubCategoryWhenItemUnderSubCategory() {
         Item testItem = createItem();
-        request.setRequestURI("/budget/subCategory/1/saveItem");
+        request.setRequestURI(SAVE_ITEM_IN_SUBCAT_METHOD_ENDPOINT);
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(this.request));
 
-        expect(mockedSubCategoryService.getSubCategoryById(1L)).andReturn(Optional.of(createSubCategory()));
+        expect(mockedSubCategoryService.getSubCategoryById(ID)).andReturn(Optional.of(createSubCategory()));
         expect(mockedItemService.addItem(anyObject())).andReturn(testItem);
         replay(mockedSubCategoryService, mockedItemService);
 
-        ResponseEntity<Object> responseEntity = itemController.saveItemInSubCategory(1L, testItem);
+        ResponseEntity<Object> responseEntity = itemController.saveItemInSubCategory(ID, testItem);
 
-        assertEquals("{Location=[http://localhost/budget/subCategory/1/saveItem/1]}", responseEntity.getHeaders().toString());
-        assertEquals(201, responseEntity.getStatusCode().value());
+        assertEquals(SAVE_ITEM_IN_SUBCAT_METHOD_RETURNED_URI, responseEntity.getHeaders().toString());
+        assertEquals(STATUS_CODE_201, responseEntity.getStatusCode().value());
 
         verify(mockedSubCategoryService, mockedItemService);
     }
@@ -123,11 +130,11 @@ public class ItemControllerTest {
         Item testItem = createItem();
         ResponseEntity testResponseEntity = new ResponseEntity(HttpStatus.OK);
 
-        expect(mockedItemService.getItemById(1L)).andReturn(Optional.of(testItem));
+        expect(mockedItemService.getItemById(ID)).andReturn(Optional.of(testItem));
         expect(mockedItemService.addItem(anyObject())).andReturn(testItem);
         replay(mockedItemService);
 
-        ResponseEntity responseEntity = itemController.updateItem(1L, testItem);
+        ResponseEntity responseEntity = itemController.updateItem(ID, testItem);
 
         assertEquals(testResponseEntity, responseEntity);
 
@@ -139,10 +146,10 @@ public class ItemControllerTest {
         Item testItem = createItem();
         ResponseEntity testResponseEntity = new ResponseEntity(HttpStatus.NOT_FOUND);
 
-        expect(mockedItemService.getItemById(1L)).andReturn(Optional.empty());
+        expect(mockedItemService.getItemById(ID)).andReturn(Optional.empty());
         replay(mockedItemService);
 
-        ResponseEntity responseEntity = itemController.updateItem(1L, testItem);
+        ResponseEntity responseEntity = itemController.updateItem(ID, testItem);
 
         assertEquals(testResponseEntity, responseEntity);
 
@@ -153,7 +160,7 @@ public class ItemControllerTest {
         Item item = new Item
                 .ItemBuilder(ITEM_NAME, ITEM_VALUE)
                 .build();
-        item.setId(1L);
+        item.setId(ID);
         return item;
     }
 

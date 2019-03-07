@@ -15,6 +15,12 @@ import java.util.Optional;
 @RestController
 public class SubCategoryController {
 
+    private static final String SAVE_SUB_CATEGORY_ENDPOINT = "/budget/mainCategory/{mainId}/saveSubCategory";
+    private static final String DELETE_SUB_CATEGORY_ENDPOINT = "/budget/deleteSubCategory/{subCategoryId}";
+    private static final String UPDATE_MAIN_CATEGORY_ENDPOINT = "budget/updateSubCategory/{subCategoryId}";
+    private static final String SUB_CATEGORY_ID = "subCategoryId";
+    private static final String ID = "/{id}";
+    private static final String MAIN_CATEGORY_ID = "mainId";
     private SubCategoryService subCategoryService;
     private MainCategoryService mainCategoryService;
 
@@ -24,8 +30,8 @@ public class SubCategoryController {
         this.mainCategoryService = mainCategoryService;
     }
 
-    @PostMapping(value = "/budget/mainCategory/{mainId}/saveSubCategory")
-    public ResponseEntity<Object> saveSubCategory(@PathVariable(value = "mainId") Long mainId,
+    @PostMapping(value = SAVE_SUB_CATEGORY_ENDPOINT)
+    public ResponseEntity<Object> saveSubCategory(@PathVariable(value = MAIN_CATEGORY_ID) Long mainId,
                                                   @RequestBody SubCategory subCategoryFromRequest) {
         ResponseEntity responseEntity;
         Optional<MainCategory> mainCategoryOptional = mainCategoryService.getMainCategoryById(mainId);
@@ -34,7 +40,7 @@ public class SubCategoryController {
             subCategoryFromRequest.setMainCategory(mainCat);
             SubCategory subCategory = subCategoryService.addSubCategory(subCategoryFromRequest);
 
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path(ID)
                     .buildAndExpand(subCategory.getId()).toUri();
 
             responseEntity = ResponseEntity.created(location).build();
@@ -44,13 +50,13 @@ public class SubCategoryController {
         return responseEntity;
     }
 
-    @DeleteMapping(value = "/budget/deleteSubCategory/{subCategoryId}")
-    public void deleteSubCategory(@PathVariable(value = "subCategoryId") Long subId) {
+    @DeleteMapping(value = DELETE_SUB_CATEGORY_ENDPOINT)
+    public void deleteSubCategory(@PathVariable(value = SUB_CATEGORY_ID) Long subId) {
         subCategoryService.deleteSubCategory(subId);
     }
 
-    @PutMapping(value = "budget/updateSubCategory/{subCategoryId}")
-    public ResponseEntity updateSubCategory(@PathVariable(value = "subCategoryId") Long id,
+    @PutMapping(value = UPDATE_MAIN_CATEGORY_ENDPOINT)
+    public ResponseEntity updateSubCategory(@PathVariable(value = SUB_CATEGORY_ID) Long id,
                                             @RequestBody SubCategory subCategoryFromRequest) {
         ResponseEntity responseEntity;
         Optional<SubCategory> subCategoryFromDB = subCategoryService.getSubCategoryById(id);

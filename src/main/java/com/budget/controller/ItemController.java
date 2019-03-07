@@ -17,6 +17,14 @@ import java.util.Optional;
 @RestController
 public class ItemController {
 
+    private static final String MAIN_ID = "mainId";
+    private static final String SUB_ID = "subId";
+    private static final String ID = "/{id}";
+    private static final String ITEM_ID = "itemId";
+    private static final String SAVE_ITEM_IN_MAIN_CATEGORY_ENDPOINT = "/budget/mainCategory/{mainId}/saveItem";
+    private static final String SAVE_ITEM_IN_SUB_CATEGORY_ENDPOINT = "/budget/subCategory/{subId}/saveItem";
+    private static final String DELETE_ITEM_ENDPOINT = "/budget/item/{itemId}";
+    private static final String UPDATE_ITEM_ENDPOINT = "budget/updateItem/{itemId}";
     private ItemService itemService;
     private MainCategoryService mainCategoryService;
     private SubCategoryService subCategoryService;
@@ -29,8 +37,8 @@ public class ItemController {
         this.subCategoryService = subCategoryService;
     }
 
-    @PostMapping(value = "/budget/mainCategory/{mainId}/saveItem")
-    public ResponseEntity<Object> saveItemInMainCategory(@PathVariable(value = "mainId") Long mainId,
+    @PostMapping(value = SAVE_ITEM_IN_MAIN_CATEGORY_ENDPOINT)
+    public ResponseEntity<Object> saveItemInMainCategory(@PathVariable(value = MAIN_ID) Long mainId,
                                                          @RequestBody Item itemFromRequest) {
         ResponseEntity responseEntity;
         Optional<MainCategory> mainCategoryOptional = mainCategoryService.getMainCategoryById(mainId);
@@ -49,8 +57,8 @@ public class ItemController {
         return responseEntity;
     }
 
-    @PostMapping(value = "/budget/subCategory/{subId}/saveItem")
-    public ResponseEntity<Object> saveItemInSubCategory(@PathVariable(value = "subId") Long subId,
+    @PostMapping(value = SAVE_ITEM_IN_SUB_CATEGORY_ENDPOINT)
+    public ResponseEntity<Object> saveItemInSubCategory(@PathVariable(value = SUB_ID) Long subId,
                                                         @RequestBody Item itemFromRequest) {
         ResponseEntity responseEntity;
         Optional<SubCategory> subCategoryOptional = subCategoryService.getSubCategoryById(subId);
@@ -59,7 +67,7 @@ public class ItemController {
             itemFromRequest.setSubCategory(subCat);
             Item item = itemService.addItem(itemFromRequest);
 
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path(ID)
                     .buildAndExpand(item.getId()).toUri();
 
             responseEntity = ResponseEntity.created(location).build();
@@ -69,13 +77,13 @@ public class ItemController {
         return responseEntity;
     }
 
-    @DeleteMapping(value = "/budget/item/{itemId}")
-    public void deleteItem(@PathVariable(value = "itemId") Long itemId) {
+    @DeleteMapping(value = DELETE_ITEM_ENDPOINT)
+    public void deleteItem(@PathVariable(value = ITEM_ID) Long itemId) {
         itemService.deleteItem(itemId);
     }
 
-    @PutMapping(value = "budget/updateItem/{itemId}")
-    public ResponseEntity updateItem(@PathVariable(value = "itemId") Long id,
+    @PutMapping(value = UPDATE_ITEM_ENDPOINT)
+    public ResponseEntity updateItem(@PathVariable(value = ITEM_ID) Long id,
                                      @RequestBody Item itemFromRequest) {
         ResponseEntity responseEntity;
         Optional<Item> itemFromDB = itemService.getItemById(id);

@@ -10,10 +10,15 @@ import java.sql.Date;
 public class Item implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private static final String ITEM_ID = "item_id";
+    private static final String SUB_ID = "sub_id";
+    private static final String MAIN_ID = "main_id";
+    private static final String IS_REPEAT = "is_repeat";
+    private static final String ORG_HIBERNATE_TYPE_NUMERIC_BOOLEAN_TYPE = "org.hibernate.type.NumericBooleanType";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "item_id")
+    @Column(name = ITEM_ID)
     private Long id;
 
     @Column(nullable = false)
@@ -25,15 +30,15 @@ public class Item implements Serializable {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "sub_id")
+    @JoinColumn(name = SUB_ID)
     private SubCategory subCategory;
 
     @ManyToOne
-    @JoinColumn(name = "main_id")
+    @JoinColumn(name = MAIN_ID)
     private MainCategory mainCategory;
 
-    @Column(name = "is_repeat", nullable = false)
-    @Type(type = "org.hibernate.type.NumericBooleanType")
+    @Column(name = IS_REPEAT, nullable = false)
+    @Type(type = ORG_HIBERNATE_TYPE_NUMERIC_BOOLEAN_TYPE)
     private boolean repeat;
 
     private Item() {

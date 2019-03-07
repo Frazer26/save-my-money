@@ -13,6 +13,11 @@ import java.util.Optional;
 @RestController
 public class MainCategoryController {
 
+    private static final String SAVE_MAIN_CATEGORY_ENDPOINT = "/budget/saveMainCategory";
+    private static final String DELETE_MAIN_CATEGORY_ENDPOINT = "/budget/deleteMainCategory/{mainCategoryId}";
+    private static final String UPDATE_MAIN_CATEGORY_ENDPOINT = "budget/updateMainCategory/{mainCategoryId}";
+    private static final String MAIN_CATEGORY_ID = "mainCategoryId";
+    private static final String ID = "/{id}";
     private MainCategoryService mainCategoryService;
 
     @Autowired
@@ -20,23 +25,23 @@ public class MainCategoryController {
         this.mainCategoryService = mainCategoryService;
     }
 
-    @PostMapping(value = "/budget/saveMainCategory")
+    @PostMapping(value = SAVE_MAIN_CATEGORY_ENDPOINT)
     public ResponseEntity<Object> saveMainCategory(@RequestBody MainCategory mainCategoryFromRequest) {
         MainCategory mainCategory = mainCategoryService.addMainCategory(mainCategoryFromRequest);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path(ID)
                 .buildAndExpand(mainCategory.getId()).toUri();
 
         return ResponseEntity.created(location).build();
     }
 
-    @DeleteMapping(value = "/budget/deleteMainCategory/{mainCategoryId}")
-    public void deleteMainCategory(@PathVariable(value = "mainCategoryId") Long mainCategoryId) {
+    @DeleteMapping(value = DELETE_MAIN_CATEGORY_ENDPOINT)
+    public void deleteMainCategory(@PathVariable(value = MAIN_CATEGORY_ID) Long mainCategoryId) {
         mainCategoryService.deleteMainCategory(mainCategoryId);
     }
 
-    @PutMapping(value = "budget/updateMainCategory/{mainCategoryId}")
-    public ResponseEntity updateMainCategory(@PathVariable(value = "mainCategoryId") Long id,
+    @PutMapping(value = UPDATE_MAIN_CATEGORY_ENDPOINT)
+    public ResponseEntity updateMainCategory(@PathVariable(value = MAIN_CATEGORY_ID) Long id,
                                              @RequestBody MainCategory mainCategoryFromRequest) {
         ResponseEntity responseEntity;
         Optional<MainCategory> mainCategoryFromDB = mainCategoryService.getMainCategoryById(id);

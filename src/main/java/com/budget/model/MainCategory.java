@@ -9,19 +9,21 @@ import java.util.List;
 public class MainCategory implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private static final String MAIN_CATEGORY = "mainCategory";
+    private static final String MAIN_ID = "main_id";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "main_id")
+    @Column(name = MAIN_ID)
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "mainCategory")
+    @OneToMany(mappedBy = MAIN_CATEGORY)
     private List<Item> items = new ArrayList<>();
 
-    @OneToMany(mappedBy = "mainCategory")
+    @OneToMany(mappedBy = MAIN_CATEGORY)
     private List<SubCategory> subCategories = new ArrayList<>();
 
     public MainCategory() {

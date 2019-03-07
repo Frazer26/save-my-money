@@ -12,6 +12,10 @@ import java.time.format.DateTimeFormatter;
 @Controller
 public class BudgetPageController {
 
+    private static final String BUDGET = "/budget";
+    private static final String MAIN_CATEGORIES = "mainCategories";
+    private static final String BUDGET1 = "budget";
+    private static final String YYYY_MM = "yyyy MM";
     private final MainCategoryService mainCategoryService;
 
     @Autowired
@@ -19,15 +23,15 @@ public class BudgetPageController {
         this.mainCategoryService = mainCategoryService;
     }
 
-    @GetMapping(value = "/budget")
+    @GetMapping(value = BUDGET)
     public String budgetView(Model model) {
-        model.addAttribute("mainCategories", mainCategoryService.getMainCategoryList());
-        return "budget";
+        model.addAttribute(MAIN_CATEGORIES, mainCategoryService.getMainCategoryList());
+        return BUDGET1;
     }
 
     public String getCurrentMonth() {
         YearMonth thisMonth = YearMonth.now();
-        DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern("yyyy MM");
+        DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern(YYYY_MM);
         return thisMonth.format(monthYearFormatter);
     }
 

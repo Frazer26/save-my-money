@@ -19,6 +19,10 @@ import static org.testng.Assert.assertEquals;
 public class MainCategoryControllerTest {
 
     private static final String MAIN_CATEGORY_NAME = "Income";
+    private static final long ID = 1L;
+    private static final String SAVE_MAIN_CATEGORY_ENDPOINT = "/budget/saveMainCategory";
+    private static final String SAVE_MAIN_CATEGORY_METHOD_RETURNED_URI = "{Location=[http://localhost/budget/saveMainCategory/1]}";
+    private static final int STATUS_CODE_201 = 201;
 
     private MainCategoryService mockedMainCatService;
     private MainCategoryController mainCategoryController;
@@ -34,8 +38,8 @@ public class MainCategoryControllerTest {
     @Test
     public void testSaveMainCategoryWhenMainCategoryNotEmpty() {
         MainCategory testMainCategory = createTestMainCategory();
-        testMainCategory.setId(1L);
-        request.setRequestURI("/budget/saveMainCategory");
+        testMainCategory.setId(ID);
+        request.setRequestURI(SAVE_MAIN_CATEGORY_ENDPOINT);
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(this.request));
 
         expect(mockedMainCatService.addMainCategory(testMainCategory)).andReturn(testMainCategory);
@@ -43,19 +47,19 @@ public class MainCategoryControllerTest {
 
         ResponseEntity<Object> responseEntity = mainCategoryController.saveMainCategory(testMainCategory);
 
-        assertEquals("{Location=[http://localhost/budget/saveMainCategory/1]}", responseEntity.getHeaders().toString());
-        assertEquals(201, responseEntity.getStatusCode().value());
+        assertEquals(SAVE_MAIN_CATEGORY_METHOD_RETURNED_URI, responseEntity.getHeaders().toString());
+        assertEquals(STATUS_CODE_201, responseEntity.getStatusCode().value());
 
         verify(mockedMainCatService);
     }
 
     @Test
     public void testDeleteMainCategory() {
-        mockedMainCatService.deleteMainCategory(anyLong());
+        mockedMainCatService.deleteMainCategory(ID);
         expectLastCall();
         replay(mockedMainCatService);
 
-        mainCategoryController.deleteMainCategory(anyLong());
+        mainCategoryController.deleteMainCategory(ID);
 
         verify(mockedMainCatService);
     }
@@ -65,11 +69,11 @@ public class MainCategoryControllerTest {
         ResponseEntity testResponseEntity = new ResponseEntity(HttpStatus.OK);
         MainCategory testMainCategory = createTestMainCategory();
 
-        expect(mockedMainCatService.getMainCategoryById(anyLong())).andReturn(Optional.of(testMainCategory));
+        expect(mockedMainCatService.getMainCategoryById(ID)).andReturn(Optional.of(testMainCategory));
         expect(mockedMainCatService.addMainCategory(anyObject())).andReturn(testMainCategory);
         replay(mockedMainCatService);
 
-        ResponseEntity responseEntity = mainCategoryController.updateMainCategory(anyLong(), new MainCategory());
+        ResponseEntity responseEntity = mainCategoryController.updateMainCategory(ID, new MainCategory());
 
         assertEquals(responseEntity, testResponseEntity);
 
@@ -80,10 +84,10 @@ public class MainCategoryControllerTest {
     public void testUpdateMainCategoryWhenNotFoundMainCategoryInDB() {
         ResponseEntity testResponseEntity = new ResponseEntity(HttpStatus.NOT_FOUND);
 
-        expect(mockedMainCatService.getMainCategoryById(0L)).andReturn(Optional.empty());
+        expect(mockedMainCatService.getMainCategoryById(ID)).andReturn(Optional.empty());
         replay(mockedMainCatService);
 
-        ResponseEntity responseEntity = mainCategoryController.updateMainCategory(anyLong(), new MainCategory());
+        ResponseEntity responseEntity = mainCategoryController.updateMainCategory(ID, new MainCategory());
 
         assertEquals(responseEntity, testResponseEntity);
 
