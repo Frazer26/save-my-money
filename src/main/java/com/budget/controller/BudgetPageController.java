@@ -16,6 +16,7 @@ public class BudgetPageController {
     private static final String MAIN_CATEGORIES = "mainCategories";
     private static final String BUDGET1 = "budget";
     private static final String YYYY_MM = "yyyy MM";
+
     private final MainCategoryService mainCategoryService;
 
     @Autowired

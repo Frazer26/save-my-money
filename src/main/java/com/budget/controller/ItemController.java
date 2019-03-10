@@ -40,21 +40,27 @@ public class ItemController {
     @PostMapping(value = SAVE_ITEM_IN_MAIN_CATEGORY_ENDPOINT)
     public ResponseEntity<Object> saveItemInMainCategory(@PathVariable(value = MAIN_ID) Long mainId,
                                                          @RequestBody Item itemFromRequest) {
-        ResponseEntity responseEntity;
-        Optional<MainCategory> mainCategoryOptional = mainCategoryService.getMainCategoryById(mainId);
-        if (mainCategoryOptional.isPresent()) {
-            MainCategory mainCat = mainCategoryOptional.get();
-            itemFromRequest.setMainCategory(mainCat);
-            Item item = itemService.addItem(itemFromRequest);
+//        ResponseEntity responseEntity;
+//        Optional<MainCategory> mainCategoryOptional = mainCategoryService.getMainCategoryById(mainId);
+//        if (mainCategoryOptional.isPresent()) {
+//            MainCategory mainCat = mainCategoryOptional.get();
+//            Item item = itemService.addItemUnderMainCategory(itemFromRequest, mainCat);
+//
+//            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path(ID)
+//                    .buildAndExpand(item.getId()).toUri();
+//
+//            responseEntity = ResponseEntity.created(location).build();
+//        } else {
+//            responseEntity = ResponseEntity.notFound().build();
+//        }
+//        return responseEntity;
 
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(item.getId()).toUri();
+        return mainCategoryService.getMainCategoryById(mainId)
+                .map(mainCategory -> itemService.addItemUnderMainCategory(itemFromRequest,mainCategory))
+                .map(item -> ServletUriComponentsBuilder.fromCurrentRequest().path(ID).buildAndExpand(item.getId()).toUri())
+                .map(uri -> ResponseEntity.created(uri).build())
+                .orElse(ResponseEntity.notFound().build());
 
-            responseEntity = ResponseEntity.created(location).build();
-        } else {
-            responseEntity = ResponseEntity.notFound().build();
-        }
-        return responseEntity;
     }
 
     @PostMapping(value = SAVE_ITEM_IN_SUB_CATEGORY_ENDPOINT)
