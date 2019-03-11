@@ -131,7 +131,7 @@ public class ItemControllerTest {
         ResponseEntity testResponseEntity = new ResponseEntity(HttpStatus.OK);
 
         expect(mockedItemService.getItemById(ID)).andReturn(Optional.of(testItem));
-        expect(mockedItemService.addItem(anyObject())).andReturn(testItem);
+        expect(mockedItemService.addItem(anyObject(), ID)).andReturn(testItem);
         replay(mockedItemService);
 
         ResponseEntity responseEntity = itemController.updateItem(ID, testItem);

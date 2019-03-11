@@ -70,7 +70,7 @@ public class MainCategoryControllerTest {
         MainCategory testMainCategory = createTestMainCategory();
 
         expect(mockedMainCatService.getMainCategoryById(ID)).andReturn(Optional.of(testMainCategory));
-        expect(mockedMainCatService.addMainCategory(anyObject())).andReturn(testMainCategory);
+        expect(mockedMainCatService.updateMainCategory(anyObject(), ID)).andReturn(testMainCategory);
         replay(mockedMainCatService);
 
         ResponseEntity responseEntity = mainCategoryController.updateMainCategory(ID, new MainCategory());

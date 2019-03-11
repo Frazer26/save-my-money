@@ -68,8 +68,7 @@ public class ItemController {
         if (!itemFromDB.isPresent()) {
             responseEntity = ResponseEntity.notFound().build();
         } else {
-            itemFromRequest.setId(id);
-            itemService.addItem(itemFromRequest);
+            itemService.addItem(itemFromRequest, id);
             responseEntity = ResponseEntity.ok().build();
         }
 

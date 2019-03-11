@@ -28,6 +28,11 @@ public class MainCategoryService {
         return mainCategoryRepository.saveAndFlush(mainCategory);
     }
 
+    public MainCategory updateMainCategory(MainCategory mainCategory, Long id) {
+        mainCategory.setId(id);
+        return mainCategoryRepository.saveAndFlush(mainCategory);
+    }
+
     public void deleteMainCategory(Long id) {
         mainCategoryRepository.deleteMainCategoryById(id);
     }

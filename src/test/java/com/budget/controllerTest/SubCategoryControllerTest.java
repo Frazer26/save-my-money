@@ -89,7 +89,7 @@ public class SubCategoryControllerTest {
         ResponseEntity testResponseEntity = new ResponseEntity(HttpStatus.OK);
 
         expect(mockedSubCategoryService.getSubCategoryById(ID)).andReturn(Optional.of(testSubCategory));
-        expect(mockedSubCategoryService.addSubCategory(testSubCategory)).andReturn(testSubCategory);
+        expect(mockedSubCategoryService.addSubCategory(testSubCategory, ID)).andReturn(testSubCategory);
         replay(mockedSubCategoryService);
 
         ResponseEntity responseEntity = subCategoryController.updateSubCategory(ID, testSubCategory);

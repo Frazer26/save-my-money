@@ -49,8 +49,7 @@ public class MainCategoryController {
         if (!mainCategoryFromDB.isPresent()) {
             responseEntity = ResponseEntity.notFound().build();
         } else {
-            mainCategoryFromRequest.setId(id);
-            mainCategoryService.addMainCategory(mainCategoryFromRequest);
+            mainCategoryService.updateMainCategory(mainCategoryFromRequest, id);
             responseEntity = ResponseEntity.ok().build();
         }
 

@@ -24,7 +24,8 @@ public class SubCategoryService {
         return subCategoryRepository.findById(id);
     }
 
-    public SubCategory addSubCategory(SubCategory subCategory) {
+    public SubCategory addSubCategory(SubCategory subCategory, Long id) {
+        subCategory.setId(id);
         return subCategoryRepository.saveAndFlush(subCategory);
     }
 

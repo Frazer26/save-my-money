@@ -23,7 +23,8 @@ public class ItemService {
         return itemRepository.findById(id);
     }
 
-    public Item addItem(Item item) {
+    public Item addItem(Item item, Long id) {
+        item.setId(id);
         return itemRepository.saveAndFlush(item);
     }
 

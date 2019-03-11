@@ -52,8 +52,7 @@ public class SubCategoryController {
         if (!subCategoryFromDB.isPresent()) {
             responseEntity = ResponseEntity.notFound().build();
         } else {
-            subCategoryFromRequest.setId(id);
-            subCategoryService.addSubCategory(subCategoryFromRequest);
+            subCategoryService.addSubCategory(subCategoryFromRequest, id);
             responseEntity = ResponseEntity.ok().build();
         }
         return responseEntity;
