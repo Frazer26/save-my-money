@@ -71,7 +71,7 @@ public class ItemControllerTest {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(this.request));
 
         expect(mockedMainCategoryService.getMainCategoryById(ID)).andReturn(Optional.of(createMainCategory()));
-        expect(mockedItemService.addItem(anyObject())).andReturn(testItem);
+        expect(mockedItemService.addItemUnderMainCategory(anyObject(), anyObject())).andReturn(testItem);
         replay(mockedMainCategoryService, mockedItemService);
 
         ResponseEntity<Object> responseEntity = itemController.saveItemInMainCategory(ID, testItem);
@@ -101,7 +101,7 @@ public class ItemControllerTest {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(this.request));
 
         expect(mockedSubCategoryService.getSubCategoryById(ID)).andReturn(Optional.of(createSubCategory()));
-        expect(mockedItemService.addItem(anyObject())).andReturn(testItem);
+        expect(mockedItemService.addItemUnderSubCategory(anyObject(), anyObject())).andReturn(testItem);
         replay(mockedSubCategoryService, mockedItemService);
 
         ResponseEntity<Object> responseEntity = itemController.saveItemInSubCategory(ID, testItem);

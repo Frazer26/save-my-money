@@ -1,6 +1,7 @@
 package com.budget.service;
 
 import com.budget.model.Item;
+import com.budget.model.MainCategory;
 import com.budget.model.SubCategory;
 import com.budget.repository.SubCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class SubCategoryService {
     }
 
     public SubCategory addSubCategory(SubCategory subCategory) {
+        return subCategoryRepository.saveAndFlush(subCategory);
+    }
+
+    public SubCategory addSubCategoryUnderMainCategory(SubCategory subCategory, MainCategory mainCategory) {
+        subCategory.setMainCategory(mainCategory);
         return subCategoryRepository.saveAndFlush(subCategory);
     }
 

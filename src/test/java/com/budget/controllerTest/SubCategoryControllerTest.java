@@ -22,6 +22,11 @@ public class SubCategoryControllerTest {
 
     private static final String SUB_CATEGORY_NAME = "Household";
     private static final String MAIN_CATEGORY_NAME = "Bills";
+    private static final int STATUS_CODE_201 = 201;
+    private static final int STATUS_CODE_404 = 404;
+    private static final long ID = 1L;
+    private static final String SAVE_SUBCATEGORY_RETURNED_URI = "{Location=[http://localhost/budget/mainCategory/1/saveSubCategoryInMainCategory/1]}";
+    private static final String SAVE_SUBCATEGORY_METHOD_ENDPOINT = "/budget/mainCategory/1/saveSubCategoryInMainCategory";
 
     private SubCategoryService mockedSubCategoryService;
     private MainCategoryService mockedMainCategoryService;
@@ -39,12 +44,12 @@ public class SubCategoryControllerTest {
 
     @Test
     public void testSaveSubCategoryWhenMainCategoryNotExist() {
-        expect(mockedMainCategoryService.getMainCategoryById(1L)).andReturn(Optional.empty());
+        expect(mockedMainCategoryService.getMainCategoryById(ID)).andReturn(Optional.empty());
         replay(mockedMainCategoryService);
 
-        ResponseEntity<Object> responseEntity = subCategoryController.saveSubCategory(1L, createSubCategory());
+        ResponseEntity<Object> responseEntity = subCategoryController.saveSubCategoryInMainCategory(ID, createSubCategory());
 
-        assertEquals(404, responseEntity.getStatusCode().value());
+        assertEquals(STATUS_CODE_404, responseEntity.getStatusCode().value());
 
         verify(mockedMainCategoryService);
     }
@@ -52,17 +57,17 @@ public class SubCategoryControllerTest {
     @Test
     public void testSaveSubcategoryWhenSubcategoryUnderMainCategory() {
         SubCategory testSubCategory = createSubCategory();
-        request.setRequestURI("/budget/mainCategory/1/saveSubCategory");
+        request.setRequestURI(SAVE_SUBCATEGORY_METHOD_ENDPOINT);
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(this.request));
 
         expect(mockedMainCategoryService.getMainCategoryById(1L)).andReturn(Optional.of(new MainCategory(MAIN_CATEGORY_NAME)));
-        expect(mockedSubCategoryService.addSubCategory(anyObject())).andReturn(testSubCategory);
+        expect(mockedSubCategoryService.addSubCategoryUnderMainCategory(anyObject(), anyObject())).andReturn(testSubCategory);
         replay(mockedMainCategoryService, mockedSubCategoryService);
 
-        ResponseEntity<Object> responseEntity = subCategoryController.saveSubCategory(1L, testSubCategory);
+        ResponseEntity<Object> responseEntity = subCategoryController.saveSubCategoryInMainCategory(ID, testSubCategory);
 
-        assertEquals("{Location=[http://localhost/budget/mainCategory/1/saveSubCategory/1]}", responseEntity.getHeaders().toString());
-        assertEquals(201, responseEntity.getStatusCode().value());
+        assertEquals(SAVE_SUBCATEGORY_RETURNED_URI, responseEntity.getHeaders().toString());
+        assertEquals(STATUS_CODE_201, responseEntity.getStatusCode().value());
 
         verify(mockedMainCategoryService, mockedSubCategoryService);
     }
@@ -83,11 +88,11 @@ public class SubCategoryControllerTest {
         SubCategory testSubCategory = createSubCategory();
         ResponseEntity testResponseEntity = new ResponseEntity(HttpStatus.OK);
 
-        expect(mockedSubCategoryService.getSubCategoryById(1L)).andReturn(Optional.of(testSubCategory));
+        expect(mockedSubCategoryService.getSubCategoryById(ID)).andReturn(Optional.of(testSubCategory));
         expect(mockedSubCategoryService.addSubCategory(testSubCategory)).andReturn(testSubCategory);
         replay(mockedSubCategoryService);
 
-        ResponseEntity responseEntity = subCategoryController.updateSubCategory(1L, testSubCategory);
+        ResponseEntity responseEntity = subCategoryController.updateSubCategory(ID, testSubCategory);
 
         assertEquals(testResponseEntity, responseEntity);
 
@@ -99,10 +104,10 @@ public class SubCategoryControllerTest {
         SubCategory testSubCategory = createSubCategory();
         ResponseEntity testResponseEntity = new ResponseEntity(HttpStatus.NOT_FOUND);
 
-        expect(mockedSubCategoryService.getSubCategoryById(1L)).andReturn(Optional.empty());
+        expect(mockedSubCategoryService.getSubCategoryById(ID)).andReturn(Optional.empty());
         replay(mockedSubCategoryService);
 
-        ResponseEntity responseEntity = subCategoryController.updateSubCategory(1L, testSubCategory);
+        ResponseEntity responseEntity = subCategoryController.updateSubCategory(ID, testSubCategory);
 
         assertEquals(testResponseEntity, responseEntity);
 
@@ -111,7 +116,7 @@ public class SubCategoryControllerTest {
 
     private SubCategory createSubCategory() {
         SubCategory subCategory = new SubCategory(SUB_CATEGORY_NAME);
-        subCategory.setId(1L);
+        subCategory.setId(ID);
         return subCategory;
     }
 }
