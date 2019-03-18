@@ -10,9 +10,17 @@
 
 <head>
     <style>
-      .menu .mainCategoryHeading { border-left: 4px solid #f38787; }
-      .menu .subcategoryHeading { border-left: 4px solid #65c465; }
-      .menu .itemHeading { border-left: 4px solid #98b3fa; }
+        .menu .mainCategoryHeading {
+            border-left: 4px solid #f38787;
+        }
+
+        .menu .subcategoryHeading {
+            border-left: 4px solid #65c465;
+        }
+
+        .menu .itemHeading {
+            border-left: 4px solid #98b3fa;
+        }
     </style>
 
     <meta charset="UTF-8">
@@ -20,61 +28,74 @@
 </head>
 
 <body>
-<!--<form>-->
-    <!--<div>-->
-        <!--<th:block th:each="maincat : ${mainCategories}">-->
-            <!--<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">-->
-                <!--<div th:text="${maincat.name}">MainCategory Name</div>-->
-                <!--<input id="saveMainCategory" type="text" name="newCategory" placeholder="Type here..."><br>-->
-                <!--<div th:if="${!maincat.items.empty}"-->
-                     <!--th:text="${maincat.items}">Item of MainCategory-->
-                <!--</div>-->
-                <!--<th:block th:each="subcat : ${maincat.subCategories}">-->
-                    <!--<div th:text="${subcat.name}">Subcat of MainCategory</div>-->
-                    <!--<th:block th:each="item : ${subcat.items}">-->
-                        <!--<div th:text="${item.name} + ${item.money}">Item's name/money Of Subcat of MainCategory</div>-->
-                    <!--</th:block>-->
-                <!--</th:block>-->
-        <!--</th:block>-->
-    <!--</div>-->
-<!--</form>-->
+<form>
+    <div>
+        <th:block th:each="maincat : ${mainCategories}">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div th:text="${maincat.name}">MainCategory Name</div>
+                <input id="saveMainCategory" type="text" name="newCategory" placeholder="Type here..."><br>
+                <div th:if="${!maincat.items.empty}"
+                     th:text="${maincat.items}">Item of MainCategory
+                </div>
+                <th:block th:each="subcat : ${maincat.subCategories}">
+                    <div th:text="${subcat.name}">Subcat of MainCategory</div>
+                    <th:block th:each="item : ${subcat.items}">
+                        <div th:text="${item.name} + ${item.money}">Item's name/money Of Subcat of MainCategory</div>
+                    </th:block>
+                </th:block>
+            </div>
+        </th:block>
+    </div>
+</form>
 
 <div class="container">
     <div class="row">
         <div class="span12">
             <div class="menu">
                 <div class="accordion">
-
                     <div class="accordion-group">
 
-                        <div class="accordion-heading mainCategoryHeading">
-                            <a class="accordion-toggle" data-toggle="collapse" href= "#mainCategory">StaticMainCategory</a>
-                        </div>
+                        <th:block th:each="maincat : ${mainCategories}">
 
-                        <div class="accordion-body collapse" id="mainCategory">
-                            <div class="accordion-inner">
-                                <div class="accordion">
+                            <div class="accordion-heading mainCategoryHeading">
+                                <a class="accordion-toggle" data-toggle="collapse" href="#mainCategory"
+                                   th:text="${maincat.name}">StaticMainCategory</a>
+                            </div>
 
-                                    <div class="accordion-group">
-                                        <div class="accordion-heading subcategoryHeading">
-                                            <a class="accordion-toggle" data-toggle="collapse" href="#subCategory">StaticSubCategory</a>
-                                        </div>
 
-                                        <div class="accordion-body collapse" id="subCategory">
-                                            <div class="accordion-inner">
-                                                <div class="accordion">
-                                                    <div class="accordion-group">
-                                                        <div class="accordion-heading itemHeading">
-                                                            <a class="accordion-toggle" data-toggle="collapse" href="#item">StaticItem</a>
+                            <div class="accordion-body collapse" id="mainCategory">
+                                <div class="accordion-inner">
+                                    <div class="accordion">
+
+                                        <div class="accordion-group">
+                                            <th:block th:each="subcat : ${maincat.subCategories}">
+                                                <div class="accordion-heading subcategoryHeading">
+                                                    <a class="accordion-toggle" data-toggle="collapse"
+                                                       href="#subCategory"
+                                                       th:text="${subcat.name}">StaticSubCategory</a>
+                                                </div>
+
+                                                <div class="accordion-body collapse" id="subCategory">
+                                                    <div class="accordion-inner">
+                                                        <div class="accordion">
+                                                            <div class="accordion-group">
+                                                                <th:block th:each="item : ${subcat.items}">
+                                                                    <div class="accordion-heading itemHeading">
+                                                                        <a class="accordion-toggle"
+                                                                           data-toggle="collapse" href="#item"
+                                                                           th:text="${item.name} + ${item.money}">StaticItem</a>
+                                                                    </div>
+                                                                </th:block>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </th:block>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </th:block>
                     </div>
                 </div>
             </div>
