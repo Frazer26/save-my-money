@@ -3,12 +3,12 @@
 <head>
     <title>Budget</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="/js/mainCategoryModification.js"></script>
+    <script src="js/mainCategoryModification.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/budget.css"/>
+    <link rel="stylesheet" type="text/css" href="css/budget.css"/>
 
 </head>
 
@@ -16,45 +16,46 @@
 
 
 <div class="container">
-    <div class="row">
+    <div class="list-group">
 
-        <div class="just-padding">
-            <div class="list-group list-group-root well">
+        <th:block th:each="maincat, iterStat : ${mainCategories}">
+            <div class="row mainCategoryHeading">
+                <a class="list-group-item" data-toggle="collapse"
+                   th:href="'#mainCategory' + ${iterStat.index}">
+                    <i class="glyphicon glyphicon-chevron-right" th:text="${maincat.name}">MainCategory</i>
+                </a>
+            </div>
+            <div class="list-group collapse" th:id="'mainCategory' + ${iterStat.index}">
 
-                <th:block th:each="maincat, iterStat : ${mainCategories}">
-                    <div class="mainCategoryHeading">
+                <div th:if="${!maincat.items.empty}">
+                    <div class="row item">
+                        <div th:text="${maincat.getItems()}"></div>
+                    </div>
+                </div>
+
+                <th:block th:each="subcat, iterStat : ${maincat.subCategories}">
+                    <div class="row subcategoryHeading">
                         <a class="list-group-item" data-toggle="collapse"
-                           th:href="'#mainCategory' + ${iterStat.index}">
-                            <i class="glyphicon glyphicon-chevron-right" th:text="${maincat.name}">MainCategory</i>
+                           th:href="'#subCategory' + ${iterStat.index}">
+                            <i class="glyphicon glyphicon-chevron-right" th:text="${subcat.name}"></i>
                         </a>
                     </div>
-                    <div class="list-group collapse" th:id="'mainCategory' + ${iterStat.index}">
+                    <div class="row">
+                        <div class="list-group collapse"
+                             th:id="'subCategory' + ${iterStat.index}">
 
-                        <div th:if="${!maincat.items.empty}">
-                            <div class="item">
-                                <div th:text="${maincat.items}"></div>
-                            </div>
+                            <th:block th:each="item : ${subcat.items}">
+                                <div class="list-group-item item col-xs-3" th:text="${item.name}"></div>
+                                <div class="list-group-item col-xs-3" th:text=" ${item.money}"></div>
+                                <div class="list-group-item col-xs-3" th:text=" ${item.date}"></div>
+                                <div class="list-group-item col-xs-3">test</div>
+
+                            </th:block>
                         </div>
-
-                        <th:block th:each="subcat, iterStat : ${maincat.subCategories}">
-                            <div class="subcategoryHeading">
-                                <a class="list-group-item" data-toggle="collapse"
-                                   th:href="'#subCategory' + ${iterStat.index}">
-                                    <i class="glyphicon glyphicon-chevron-right" th:text="${subcat.name}"></i>
-                                </a>
-                            </div>
-                            <div class="list-group collapse"
-                                 th:id="'subCategory' + ${iterStat.index}">
-
-                                <th:block th:each="item : ${subcat.items}">
-                                    <a class="list-group-item item" th:text="${item.name} + ${item.money}"></a>
-                                </th:block>
-                            </div>
-                        </th:block>
                     </div>
                 </th:block>
             </div>
-        </div>
+        </th:block>
     </div>
 </div>
 
