@@ -45,11 +45,20 @@
                              th:id="'subCategory' + ${iterStat.index}">
 
                             <th:block th:each="item : ${subcat.items}">
-                                <div class="list-group-item item col-xs-3" th:text="${item.name}"></div>
-                                <div class="list-group-item col-xs-3" th:text=" ${item.money}"></div>
-                                <div class="list-group-item col-xs-3" th:text=" ${item.date}"></div>
-                                <div class="list-group-item col-xs-3">test</div>
-
+                                <div class="list-group-item item col-xs-3 col-lg-3" th:text="${item.name}"></div>
+                                <div class="list-group-item col-xs-3 col-lg-3" th:text=" ${item.money}"></div>
+                                <div class="list-group-item col-xs-3 col-lg-3" th:text=" ${item.date}"></div>
+                                <div class="list-group-item col-xs-3 col-lg-3">
+                                    <a href="#">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </a>
+                                    <a href="#">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                    <a href="#">
+                                        <span class="glyphicon glyphicon-minus"></span>
+                                    </a>
+                                </div>
                             </th:block>
                         </div>
                     </div>
