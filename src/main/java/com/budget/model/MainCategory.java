@@ -1,72 +1,21 @@
 package com.budget.model;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Entity  //This tells Hibernate to make a table out of this class
-public class MainCategory implements Serializable {
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+public enum MainCategory {
 
-    private static final long serialVersionUID = 1L;
-    private static final String MAIN_CATEGORY = "mainCategory";
-    private static final String MAIN_ID = "main_id";
+    INCOME("Income"),
+    COST("Cost"),
+    SAVED_MONEY("Saved money");
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = MAIN_ID)
-    private Long id;
+    private final String mainCategory;
 
-    @Column(nullable = false)
-    private String name;
-
-    @OneToMany(mappedBy = MAIN_CATEGORY)
-    private List<Item> items = new ArrayList<>();
-
-    @OneToMany(mappedBy = MAIN_CATEGORY)
-    private List<SubCategory> subCategories = new ArrayList<>();
-
-    public MainCategory() {
+    MainCategory(String mainCategory) {
+        this.mainCategory = mainCategory;
     }
 
-    public MainCategory(String name) {
-        this.name = name;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void addItem(Item item) {
-        this.items.add(item);
-    }
-
-    public List<SubCategory> getSubCategories() {
-        return subCategories;
-    }
-
-    public void addSubCategory(SubCategory subCategory) {
-        this.subCategories.add(subCategory);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
+    public String getMainCategory() {
+        return mainCategory;
     }
 }

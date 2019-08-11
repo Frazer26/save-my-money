@@ -8,24 +8,22 @@ import java.util.List;
 @Entity
 public class SubCategory implements Serializable {
 
+    public static final SubCategory EMPTY = new SubCategory();
     private static final long serialVersionUID = 1L;
-    public static final String SUB_ID = "sub_id";
-    public static final String MAIN_ID = "main_id";
-    public static final String SUB_CATEGORY = "subCategory";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = SUB_ID)
+    @Column(name = "sub_id")
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = MAIN_ID, nullable = false)
+    @Column(name = "mainCategory", columnDefinition = "varchar(255) default 'Cost'", nullable = false)
+    @Enumerated(EnumType.STRING)
     private MainCategory mainCategory;
 
-    @OneToMany(mappedBy = SUB_CATEGORY)
+    @OneToMany(mappedBy = "subCategory")
     private List<Item> items = new ArrayList<>();
 
     public SubCategory() {

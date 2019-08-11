@@ -9,16 +9,12 @@ import java.sql.Date;
 @Entity
 public class Item implements Serializable {
 
+    public static final Item EMPTY = new Item();
     private static final long serialVersionUID = 1L;
-    private static final String ITEM_ID = "item_id";
-    private static final String SUB_ID = "sub_id";
-    private static final String MAIN_ID = "main_id";
-    private static final String IS_REPEAT = "is_repeat";
-    private static final String ORG_HIBERNATE_TYPE_NUMERIC_BOOLEAN_TYPE = "org.hibernate.type.NumericBooleanType";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = ITEM_ID)
+    @Column(name = "item_id")
     private Long id;
 
     @Column(nullable = false)
@@ -27,18 +23,19 @@ public class Item implements Serializable {
     @Column(nullable = false)
     private Integer money;
 
+    @Column(nullable = false)
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name = SUB_ID)
+    @JoinColumn(name = "sub_id")
     private SubCategory subCategory;
 
-    @ManyToOne
-    @JoinColumn(name = MAIN_ID)
+    @Column(name = "mainCategory")
+    @Enumerated(EnumType.STRING)
     private MainCategory mainCategory;
 
-    @Column(name = IS_REPEAT, nullable = false)
-    @Type(type = ORG_HIBERNATE_TYPE_NUMERIC_BOOLEAN_TYPE)
+    @Column(name = "is_repeat", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean repeat;
 
     private Item() {

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.budget.model.SubCategory.EMPTY;
+
 @Service
 public class SubCategoryService {
 
@@ -24,18 +26,28 @@ public class SubCategoryService {
         return subCategoryRepository.findById(id);
     }
 
-    public SubCategory addSubCategory(SubCategory subCategory, Long id) {
-        subCategory.setId(id);
-        return subCategoryRepository.saveAndFlush(subCategory);
+    public List<SubCategory> getAllSubCategories(){
+        return subCategoryRepository.findAll();
     }
 
-    public SubCategory addSubCategoryUnderMainCategory(SubCategory subCategory, MainCategory mainCategory) {
-        subCategory.setMainCategory(mainCategory);
-        return subCategoryRepository.saveAndFlush(subCategory);
+    public SubCategory saveSubCategory(SubCategory subCategory) {
+        subCategory.setMainCategory(MainCategory.COST);
+        return subCategoryRepository.save(subCategory);
     }
 
     public void deleteSubCategory(Long id) {
         subCategoryRepository.deleteSubCategoryById(id);
+    }
+
+    public SubCategory updateSubCategory(SubCategory subCategory, Long id) {
+        Optional<SubCategory> subCategoryFromDB = getSubCategoryById(id);
+
+        if (subCategoryFromDB.isEmpty()) {
+            return EMPTY;
+        }
+
+        subCategory.setId(id);
+        return saveSubCategory(subCategory);
     }
 
     public int countMoneyUnderSubCat(SubCategory subCategory) {
