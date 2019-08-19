@@ -37,9 +37,9 @@ public class ItemService {
     }
 
     public Item saveItemUnderMainCategory(Item item, MainCategory mainCategory) {
-        if (mainCategory.getMainCategory().equals("INCOME")) {
+        if (mainCategory.getMainCategory().equals("Income")) {
             item.setMainCategory(INCOME);
-        } else if (mainCategory.getMainCategory().equals("SAVED_MONEY")) {
+        } else if (mainCategory.getMainCategory().equals("Saved money")) {
             item.setMainCategory(SAVED_MONEY);
         } else {
             return EMPTY;
