@@ -1,10 +1,12 @@
 package com.budget.model;
 
+import com.budget.deserializer.LocalDateDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 public class Item implements Serializable {
@@ -24,7 +26,8 @@ public class Item implements Serializable {
     private Integer money;
 
     @Column(nullable = false)
-    private Date date;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "sub_id")
@@ -58,11 +61,11 @@ public class Item implements Serializable {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -114,7 +117,7 @@ public class Item implements Serializable {
     public static class ItemBuilder {
         private String name;
         private Integer money;
-        private Date date;
+        private LocalDate date;
         private SubCategory subCategory;
         private MainCategory mainCategory;
         private boolean repeat;
@@ -124,7 +127,7 @@ public class Item implements Serializable {
             this.money = money;
         }
 
-        public ItemBuilder attachDate(Date date) {
+        public ItemBuilder attachDate(LocalDate date) {
             this.date = date;
             return this;
         }

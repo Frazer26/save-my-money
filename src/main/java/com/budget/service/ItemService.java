@@ -7,6 +7,7 @@ import com.budget.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import static com.budget.model.Item.EMPTY;
 import static com.budget.model.MainCategory.INCOME;
 import static com.budget.model.MainCategory.SAVED_MONEY;
 
+@Transactional
 @Service
 public class ItemService {
 
