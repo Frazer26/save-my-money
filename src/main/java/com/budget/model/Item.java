@@ -1,6 +1,7 @@
 package com.budget.model;
 
 import com.budget.deserializer.LocalDateDeserializer;
+import com.budget.deserializer.MainCategoryDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.hibernate.annotations.Type;
 
@@ -35,6 +36,7 @@ public class Item implements Serializable {
 
     @Column(name = "mainCategory")
     @Enumerated(EnumType.STRING)
+    @JsonDeserialize(using = MainCategoryDeserializer.class)
     private MainCategory mainCategory;
 
     @Column(name = "is_repeat", nullable = false)

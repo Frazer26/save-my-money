@@ -1,9 +1,11 @@
 package com.budget.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,11 +22,13 @@ public class LocalDateDeserializer extends StdDeserializer<LocalDate> {
 
     @Override
     public LocalDate deserialize(JsonParser parser, DeserializationContext deserializationContext) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        ObjectCodec oc = parser.getCodec();
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            return LocalDate.parse(parser.readValueAs(String.class), formatter);
+            JsonNode node = oc.readTree(parser);
+            return LocalDate.parse(node.asText(), formatter);
         } catch (Exception e) {
-            log.error("Cannot deserialize Date from incoming JSON.");
+            log.error("Cannot deserialize Date from incoming JSON. " + e);
             return null;
         }
     }
