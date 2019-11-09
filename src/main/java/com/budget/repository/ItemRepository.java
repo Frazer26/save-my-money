@@ -5,12 +5,13 @@ import com.budget.model.MainCategory;
 import com.budget.model.SubCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
     void deleteItemById(Long id);
 
-    List<Item> findItemsByMainCategory(MainCategory mainCategory);
+    List<Item> findItemsByMainCategoryAndDateBetween(MainCategory mainCategory, LocalDate start, LocalDate end);
 
     List<Item> findItemsBySubCategory(SubCategory subCategory);
 }

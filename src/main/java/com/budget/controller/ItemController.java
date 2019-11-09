@@ -4,10 +4,12 @@ import com.budget.model.Item;
 import com.budget.model.MainCategory;
 import com.budget.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.budget.model.Item.EMPTY;
@@ -25,8 +27,10 @@ public class ItemController {
     }
 
     @GetMapping(value = "/budget/{mainCategory}")
-    public List<Item> getItemUnderMainCategory(@PathVariable MainCategory mainCategory) {
-        return itemService.getItemsUnderMainCategory(mainCategory);
+    public List<Item> getItemUnderMainCategory(@PathVariable("mainCategory") MainCategory mainCategory,
+                                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+        return itemService.getItemsUnderMainCategory(mainCategory, startDate, endDate);
     }
 
     @PostMapping(value = "/budget/{mainCategory}")

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +31,8 @@ public class ItemService {
         return itemRepository.findById(id);
     }
 
-    public List<Item> getItemsUnderMainCategory(MainCategory mainCategory) {
-        return itemRepository.findItemsByMainCategory(mainCategory);
+    public List<Item> getItemsUnderMainCategory(MainCategory mainCategory, LocalDate start, LocalDate end) {
+        return itemRepository.findItemsByMainCategoryAndDateBetween(mainCategory, start, end);
     }
 
     public List<Item> getItemsUnderSubCategory(SubCategory subCategory) {
