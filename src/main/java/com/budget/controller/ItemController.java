@@ -28,8 +28,8 @@ public class ItemController {
 
     @GetMapping(value = "/budget/{mainCategory}")
     public List<Item> getItemUnderMainCategory(@PathVariable("mainCategory") MainCategory mainCategory,
-                                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-                                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+                                               @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                               @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
         return itemService.getItemsUnderMainCategory(mainCategory, startDate, endDate);
     }
 
