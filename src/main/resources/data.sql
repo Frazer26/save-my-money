@@ -21,6 +21,9 @@ INSERT INTO item (date, money, name, is_repeat, main_category) VALUES
 INSERT INTO item (date, money, name, is_repeat, main_category) VALUES
 ('2019-02-01', 3500, 'Money from grandpa',0,'INCOME');
 
+INSERT INTO item (date, money, name, is_repeat, main_category) VALUES
+('2019-11-18', 100000, 'Allampapir',0,'SAVED_MONEY');
+
 
 
 
