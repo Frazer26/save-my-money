@@ -2,8 +2,6 @@ package com.budget.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class SubCategory implements Serializable {
@@ -19,12 +17,9 @@ public class SubCategory implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "mainCategory", columnDefinition = "varchar(255) default 'Cost'", nullable = false)
+    @Column(name = "mainCategory", columnDefinition = "varchar(255) default 'COST'", nullable = false)
     @Enumerated(EnumType.STRING)
     private MainCategory mainCategory;
-
-    @OneToMany(mappedBy = "subCategory")
-    private List<Item> items = new ArrayList<>();
 
     public SubCategory() {
     }
@@ -36,14 +31,6 @@ public class SubCategory implements Serializable {
     public SubCategory(String name, MainCategory mainCategory) {
         this.name = name;
         this.mainCategory = mainCategory;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void addItem(Item item) {
-        this.items.add(item);
     }
 
     public Long getId() {

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class SubCategoryController {
 
@@ -20,25 +21,27 @@ public class SubCategoryController {
         this.subCategoryService = subCategoryService;
     }
 
-    @GetMapping(value = "/budget/subcategory")
+    @GetMapping(value = "/budget/COST")
     public ResponseEntity<List<SubCategory>> getAllSubcategories() {
         return ResponseEntity.ok(subCategoryService.getAllSubCategories());
     }
 
 
-    @PostMapping(value = "/budget/subcategory")
+    @PostMapping(value = "/budget/COST")
     public ResponseEntity saveSubCategoryUnderCost(@RequestBody SubCategory subCategory) {
-        //validálást betenni?
         SubCategory savedSubCategory = subCategoryService.saveSubCategory(subCategory);
+        if (savedSubCategory.equals(SubCategory.EMPTY)) {
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
         return new ResponseEntity<>(savedSubCategory, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/budget/deleteSubcategory/{subCategoryId}")
+    @DeleteMapping(value = "/budget/COST/deleteSubcategory/{subCategoryId}")
     public void deleteSubCategory(@PathVariable(value = SUB_CATEGORY_ID) Long id) {
         subCategoryService.deleteSubCategory(id);
     }
 
-    @PutMapping(value = "budget/updateSubCategory/{subCategoryId}")
+    @PutMapping(value = "budget/COST/updateSubCategory/{subCategoryId}")
     public ResponseEntity updateSubCategory(@PathVariable(value = SUB_CATEGORY_ID) Long id,
                                             @RequestBody SubCategory subCategory) {
         SubCategory updatedSubCategory = subCategoryService.updateSubCategory(subCategory, id);
