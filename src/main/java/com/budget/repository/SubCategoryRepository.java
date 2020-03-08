@@ -8,5 +8,8 @@ import java.util.List;
 
 public interface SubCategoryRepository extends JpaRepository<SubCategory, Long> {
     List<SubCategory> findSubCategoriesByMainCategory(MainCategory mainCategory);
+
     void deleteSubCategoryById(Long id);
+
+    SubCategory findSubCategoryByName(String subCategoryName);
 }

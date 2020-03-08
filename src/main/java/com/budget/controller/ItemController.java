@@ -2,6 +2,7 @@ package com.budget.controller;
 
 import com.budget.model.Item;
 import com.budget.model.MainCategory;
+import com.budget.model.SubCategory;
 import com.budget.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -41,6 +42,15 @@ public class ItemController {
     @PostMapping(value = "/budget/{mainCategory}")
     public ResponseEntity saveItemUnderMainCategory(@PathVariable MainCategory mainCategory, @RequestBody Item item) {
         Item savedItem = itemService.saveItemUnderMainCategory(item, mainCategory);
+        if (savedItem.equals(EMPTY)) {
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        return new ResponseEntity<>(savedItem, HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/budget/subcategory/{subcategory}")
+    public ResponseEntity saveItemUnderSubCategory(@PathVariable String subcategory, @RequestBody Item item) {
+        Item savedItem = itemService.saveItemUnderSubCategory(item, subcategory);
         if (savedItem.equals(EMPTY)) {
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }

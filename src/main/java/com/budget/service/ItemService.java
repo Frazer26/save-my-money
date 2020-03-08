@@ -4,6 +4,7 @@ import com.budget.model.Item;
 import com.budget.model.MainCategory;
 import com.budget.model.SubCategory;
 import com.budget.repository.ItemRepository;
+import com.budget.repository.SubCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +22,12 @@ import static com.budget.model.MainCategory.SAVED_MONEY;
 public class ItemService {
 
     private ItemRepository itemRepository;
+    private SubCategoryRepository subCategoryRepository;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository) {
+    public ItemService(ItemRepository itemRepository, SubCategoryRepository subCategoryRepository) {
         this.itemRepository = itemRepository;
+        this.subCategoryRepository = subCategoryRepository;
     }
 
     private Optional<Item> getItemById(Long id) {
@@ -50,9 +53,13 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
-    public Item saveItemUnderSubCategory(Item item, SubCategory subCategory) {
-        item.setSubCategory(subCategory);
-        return itemRepository.save(item);
+    public Item saveItemUnderSubCategory(Item item, String subCategoryName) {
+        SubCategory subCategory = subCategoryRepository.findSubCategoryByName(subCategoryName);
+        if (subCategory != null) {
+            item.setSubCategory(subCategory);
+            return itemRepository.save(item);
+        }
+        return EMPTY;
     }
 
     public Item updateItem(Item item, Long id) {
