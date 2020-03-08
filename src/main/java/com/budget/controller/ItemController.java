@@ -33,6 +33,11 @@ public class ItemController {
         return itemService.getItemsUnderMainCategory(mainCategory, startDate, endDate);
     }
 
+    @GetMapping(value = "/budget/subcategory")
+    public List<Item> getAllItemsWhereSubCategoryNotNull() {
+        return itemService.getAllItemsWhereSubCategoryNotNull();
+    }
+
     @PostMapping(value = "/budget/{mainCategory}")
     public ResponseEntity saveItemUnderMainCategory(@PathVariable MainCategory mainCategory, @RequestBody Item item) {
         Item savedItem = itemService.saveItemUnderMainCategory(item, mainCategory);
@@ -55,6 +60,5 @@ public class ItemController {
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         return new ResponseEntity<>(updatedItem, HttpStatus.OK);
-
     }
 }

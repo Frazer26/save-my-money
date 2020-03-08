@@ -13,5 +13,5 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findItemsByMainCategoryAndDateBetween(MainCategory mainCategory, LocalDate start, LocalDate end);
 
-    List<Item> findItemsBySubCategory(SubCategory subCategory);
+    List<Item> findItemsBySubCategoryNotNull();
 }

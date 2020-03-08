@@ -35,8 +35,8 @@ public class ItemService {
         return itemRepository.findItemsByMainCategoryAndDateBetween(mainCategory, start, end);
     }
 
-    public List<Item> getItemsUnderSubCategory(SubCategory subCategory) {
-        return itemRepository.findItemsBySubCategory(subCategory);
+    public List<Item> getAllItemsWhereSubCategoryNotNull() {
+        return itemRepository.findItemsBySubCategoryNotNull();
     }
 
     public Item saveItemUnderMainCategory(Item item, MainCategory mainCategory) {
