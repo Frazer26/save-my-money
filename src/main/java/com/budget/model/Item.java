@@ -2,6 +2,7 @@ package com.budget.model;
 
 import com.budget.deserializer.LocalDateDeserializer;
 import com.budget.deserializer.MainCategoryDeserializer;
+import com.budget.deserializer.SubCategoryDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.hibernate.annotations.Type;
 
@@ -32,6 +33,7 @@ public class Item implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "sub_id")
+    @JsonDeserialize(using = SubCategoryDeserializer.class)
     private SubCategory subCategory;
 
     @Column(name = "mainCategory")

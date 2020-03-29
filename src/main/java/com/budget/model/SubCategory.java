@@ -33,6 +33,12 @@ public class SubCategory implements Serializable {
         this.mainCategory = mainCategory;
     }
 
+    public SubCategory(Long id, String name, MainCategory mainCategory) {
+        this.id = id;
+        this.name = name;
+        this.mainCategory = mainCategory;
+    }
+
     public Long getId() {
         return id;
     }
